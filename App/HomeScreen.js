@@ -8,7 +8,8 @@ const HomeScreen = ({navigation}) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading} >
-        <Text style={styles.dolpino}> Your Streak </Text>
+      <Text style={styles.h1}> Howdy, {"\n"} Olivia! </Text>
+        <Text style={styles.h3}> Your Streak: 29 Days! </Text>
         <DateTimeSelector></DateTimeSelector>
       </View>
 
@@ -54,7 +55,7 @@ const HomeScreen = ({navigation}) => {
                 source={require('./assets/17.png')}
 
                 />
-              <Text style={styles.h2}> Activity  </Text>
+              <Text style={styles.h2a}> Activity  </Text>
             </View>
           </Pressable>
           </View>
@@ -84,14 +85,39 @@ const HomeScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   h2:{
-    fontSize:34,
+    fontFamily:'Dolpino',
+    padding:"2%",
+    fontSize:40,
+    color:"#FFFFFF",
+
+  },
+
+  h2a:{
+    fontFamily:'Dolpino',
+    padding:"2%",
+    fontSize:35,
+    color:"#FFFFFF",
+
+  },
+
+  h3:{
+    fontFamily:'Dolpino',
+  
+    fontSize:20,
+    color:"#7097FA",
+
   },
   container: {
     flex: 1,
     padding:"5%"
+    
   },
-  dolpino: {
+  h1: {
     fontFamily:'Dolpino',
+    fontSize:68,
+    paddingVertical:"5%",
+    right:17
+   
   },
   heading: {
     margin:"5%",

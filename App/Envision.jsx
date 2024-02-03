@@ -6,14 +6,12 @@ import GenBtn from './Components/GenBtn';
 
 const Envision = () => {
   return (
-    <View style={styles.container}>
+    
       
-        <GoalList />
+      <GoalList />
       
-      <View style={styles.buttonContainer}>
-        <GenBtn text={"Generate"} />
-      </View>
-    </View>
+      
+    
   );
 };
 

@@ -6,7 +6,12 @@ import DateTimeSelector from './Components/DatetimeSelector';
 const PastLogs = ({datetime}) => {
   return (
     <View>
-        <DateTimeSelector></DateTimeSelector>
+      <View style={styles.heading}>
+
+         <DateTimeSelector></DateTimeSelector>
+
+      </View>
+      
         <View style={styles.heading}>
             <Text> {datetime} </Text>
         </View>

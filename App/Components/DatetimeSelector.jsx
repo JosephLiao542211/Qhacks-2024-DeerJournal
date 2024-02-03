@@ -1,73 +1,52 @@
-import React, { useState } from "react";
-import { StyleSheet, Button, View, Text, TouchableWithoutFeedback } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function App() {
+const DateTimeSelector = ({ onChange }) => {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
-  const onChange = (event, selectedDate) => {
-    setShowPicker(false); // Hide the picker when a date/time is selected
+  const handleDateChange = (event, selectedDate) => {
+    setShowPicker(false);
     if (selectedDate) {
       setDate(selectedDate);
+      onChange(selectedDate); // Passing selected date to parent component
     }
   };
 
-  const showDateTimePicker = () => {
-    setShowPicker(true); // Show the picker when the button is clicked
-  };
-
-  const hideDateTimePicker = () => {
-    setShowPicker(false); // Hide the picker when cancel is clicked or clicked away from the modal
-  };
-
-  const onOKPress = () => {
-    // You can add additional logic here if needed
-    hideDateTimePicker();
+  const togglePicker = () => {
+    setShowPicker(!showPicker);
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={showDateTimePicker}>
-        <View>
-          <Text style={styles.dateText}>{date.toLocaleString()}</Text>
-        </View>
-      </TouchableWithoutFeedback>
+    <View>
+      <TouchableOpacity onPress={togglePicker}>
+        <Text style={styles.dateText}>{date.toLocaleString()}</Text>
+      </TouchableOpacity>
       {showPicker && (
-        
-          <DateTimePicker
-            value={date}
-            mode={"time"}
-            is24Hour={true}
-            onChange={onChange}
-          />
-      
+        <DateTimePicker
+          value={date}
+          mode="time"
+          is24Hour={false}
+          display="spinner"
+          onChange={handleDateChange}
+        />
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    // alignItems: "center",
-  },
   dateText: {
     fontSize: 18,
-    marginBottom: 20,
-  },
-  modalContainer: {
-    backgroundColor: "#fff",
+    justifyContent:"center",
+    alignContent:"center",
+    marginTop: 20,
+    padding: 10,
+    width:"80%",
+    backgroundColor: '#D9D9D9',
     borderRadius: 10,
-    elevation: 5,
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
   },
 });
+
+export default DateTimeSelector;
