@@ -7,11 +7,21 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Envision from './Envision';
 import PastLogs from './PastLogs';
 import Activity from './Activity';
+import Login from './Components/Login';
+
+
+
 const Stack = createNativeStackNavigator();
 const App = () => {
+  
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{title: 'Login', headerShown: true}}
+        />
         <Stack.Screen
           name="Home"
           component={HomeScreen}

@@ -25,6 +25,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "react-native-auth0",
+        {
+          "domain": "dev-lv87eip48bt5k7ku.us.auth0.com"
+        }
+      ]
+    ]
   }
 }

@@ -2,76 +2,30 @@
 //https://auth0.com/blog/backend-for-frontend-pattern-with-auth0-and-dotnet/
 //https://developer.auth0.com/resources/code-samples/full-stack/hello-world/basic-access-control/spa/react-typescript/express-typescript
 
-
 import { MongoClient } from "mongodb";
-import express from 'express';
-import logger from 'morgan';
-import { auth, requiredScopes } from 'express-oauth2-jwt-bearer'
-import helmet from "helmet"
-import nocache from "nocache"
-import cors from "cors"
+import express from "express";
+import logger from "morgan";
+import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
+import helmet from "helmet";
+import nocache from "nocache";
+import cors from "cors";
 import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
 
-if (!(process.env.PORT && process.env.CLIENT_ORIGIN_URL)) {
-  throw new Error(
-    "Missing required environment variables. Check docs for more info."
-  );
-}
-
-const PORT = parseInt(process.env.PORT, 10);
-const CLIENT_ORIGIN_URL = process.env.CLIENT_ORIGIN_URL;
-
 const app = express();
-const apiRouter = express.Router();
 
-app.use(express.json());
-app.set("json spaces", 2);
+const PORT = process.env.PORT || 3000;
 
-app.use(
-  helmet({
-    hsts: {
-      maxAge: 31536000,
-    },
-    contentSecurityPolicy: {
-      useDefaults: false,
-      directives: {
-        "default-src": ["'none'"],
-        "frame-ancestors": ["'none'"],
-      },
-    },
-    frameguard: {
-      action: "deny",
-    },
-  })
-);
-
-app.use((req, res, next) => {
-  res.contentType("application/json; charset=utf-8");
-  next();
+app.get("/api/test", (req, res) => {
+  res.json({
+    message: "Hello world.",
+  });
 });
-app.use(nocache());
-
-app.use(
-  cors({
-    origin: CLIENT_ORIGIN_URL,
-    methods: ["GET"],
-    allowedHeaders: ["Authorization", "Content-Type"],
-    maxAge: 86400,
-  })
-);
-
-app.use("/api", apiRouter);
-apiRouter.use("/messages", messagesRouter);
-
-app.use(errorHandler);
-app.use(notFoundHandler);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
 
 // // Authorization middleware. When used, the Access Token must
 // // exist and be verified against the Auth0 JSON Web Key Set.
@@ -86,7 +40,7 @@ app.listen(PORT, () => {
 // // This route doesn't need authentication
 // app.get('/api/login', function (req, res) {
 //   // TODO: The backend uses OpenID connect with Auth0 to authenticate the user and getting the id, access, and refresh tokens.
-  
+
 //   // TODO: The backend stores the user's tokens in a cache.
 
 //   // TODO: An encrypted cookie is issued for the frontend representing the user authentication session.

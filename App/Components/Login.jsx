@@ -7,7 +7,7 @@ Based on [this gist](https://gist.github.com/thedewpoint/181281f8cbec10378ecd4bb
 */
 
 import { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, Pressable } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { setItemAsync, getItemAsync, deleteItemAsync } from "expo-secure-store";
 import {
@@ -32,7 +32,7 @@ import { create } from "zustand";
 // --------------------------------------------------
 const endpoint = "dev-lv87eip48bt5k7ku.us.auth0.com";
 const clientId = "JrTZcLsPtOFvg6cOBNe2gCK4K1umsENG";
-const scheme = "my.app";
+const scheme = "exp";
 const scopes = ["openid", "offline_access", "profile", "email"];
 
 // --------------------------------------------------
@@ -62,65 +62,62 @@ const fetchRefreshToken = async () => getItemAsync(AUTH_STORAGE_KEY);
 
 // }
 
-const useUserStore =
-  create <
-  StoreConfig >
-  ((set, get) => ({
-    user: null,
-    discovery: null,
-    authError: null,
-    setAuthError: (authError) => set({ authError }),
+const useUserStore = create((set, get) => ({
+  user: null,
+  discovery: null,
+  authError: null,
+  setAuthError: (authError) => set({ authError }),
 
-    logout: async () => {
-      try {
-        set({ user: null, authError: null });
-        deleteRefreshToken();
+  logout: async () => {
+    try {
+      set({ user: null, authError: null });
+      deleteRefreshToken();
 
-        // // IF YOUR PROVIDER SUPPORTS A `revocationEndpoint` (which Azure AD does not):
-        // const token = await fetchRefreshToken()
-        // const discovery = get().discovery || await fetchDiscoveryAsync(endpoint)
-        // await token ? revokeAsync({ token, clientId }, discovery) : undefined
-      } catch (err) {
-        set({
-          authError: "LOGOUT: " + (err.message || "something went wrong"),
-        });
-      }
-    },
+      // // IF YOUR PROVIDER SUPPORTS A `revocationEndpoint` (which Azure AD does not):
+      // const token = await fetchRefreshToken()
+      // const discovery = get().discovery || await fetchDiscoveryAsync(endpoint)
+      // await token ? revokeAsync({ token, clientId }, discovery) : undefined
+    } catch (err) {
+      set({
+        authError: "LOGOUT: " + (err.message || "something went wrong"),
+      });
+    }
+  },
 
-    setTokenResponse: (responseToken) => {
-      // cache the token for next time
-      const tokenConfig = responseToken.getRequestConfig();
-      const { idToken, refreshToken } = tokenConfig;
+  setTokenResponse: (responseToken) => {
+    // cache the token for next time
+    const tokenConfig = responseToken.getRequestConfig();
+    const { idToken, refreshToken } = tokenConfig;
 
-      refreshToken && storeRefreshToken(refreshToken);
+    refreshToken && storeRefreshToken(refreshToken);
 
-      // extract the user info
-      if (!idToken) return;
-      const decoded = jwtDecode(idToken);
-      set({ user: { idToken, decoded } });
-    },
+    // extract the user info
+    if (!idToken) return;
+    const decoded = jwtDecode(idToken);
+    set({ user: { idToken, decoded } });
+  },
 
-    maybeRefreshToken: async () => {
-      const refreshToken = await fetchRefreshToken();
-      if (!refreshToken) return; // nothing to do
-      const discovery =
-        get().discovery || (await fetchDiscoveryAsync(endpoint));
-      get().setTokenResponse(
-        await refreshAsync({ clientId, refreshToken }, discovery)
-      );
-    },
-  }));
+  maybeRefreshToken: async () => {
+    const refreshToken = await fetchRefreshToken();
+    if (!refreshToken) return; // nothing to do
+      const discovery = get().discovery || (await fetchDiscoveryAsync(endpoint));
+      console.log("discovery", discovery);
+    get().setTokenResponse(
+      await refreshAsync({ clientId, refreshToken }, discovery)
+    );
+  },
+}));
 
 fetchDiscoveryAsync(endpoint).then((discovery) =>
   useUserStore.setState({ discovery })
-);
+).catch((error) => console.error('Error fetching discovery document:', error));
 
 // --------------------------------------------------
 // --------------------------------------------------
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function Login() {
+export default function Login({ navigation }) {
   const {
     user,
     discovery,
@@ -137,6 +134,14 @@ export default function Login() {
     { clientId, scopes, redirectUri },
     discovery
   );
+  console.log("discovery", discovery);
+  console.log("user", user);
+  console.log("authError", authError);
+  console.log("clientId", clientId);
+  console.log("scopes", scopes);
+    console.log("redirectUri", redirectUri);
+  console.log("request", request);
+  console.log("response", response);
 
   useEffect(() => {
     WebBrowser.warmUpAsync();
@@ -186,7 +191,7 @@ export default function Login() {
           },
         });
         stage = "EXCHANGE TOKEN";
-
+        console.log("accessToken", accessToken, discovery);
         setTokenResponse(await exchangeCodeAsync(accessToken, discovery));
       } catch (e) {
         setAuthError(stage + ": " + (e.message || "something went wrong"));
@@ -194,13 +199,14 @@ export default function Login() {
     };
     getToken();
   }, [response, discovery, codeUsed]);
-
+    console.log("request", request);
+    console.log("user", user);
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <View>
           <Button
-            disabled={!request || !!user}
+            disabled={!request || user}
             title="Log in"
             onPress={() => {
               setCodeUsed(false);
@@ -217,10 +223,14 @@ export default function Login() {
         />
       </View>
 
-      {/* <Text style={[styles.text]}>Cache tried: {cacheTried ? "yes" : "no"}</Text> */}
-      {/* <Text style={[styles.text]}>Code exists: {(!!response?.params?.code) ? "yes" : "no"}</Text> */}
-      {/* <Text style={[styles.text]}>Code Used: {codeUsed ? "yes" : "no"}</Text> */}
-      {/* <Text style={styles.text}>{JSON.stringify(response)}</Text> */}
+      <Text style={[styles.text]}>
+        Cache tried: {cacheTried ? "yes" : "no"}
+      </Text>
+      <Text style={[styles.text]}>
+        Code exists: {!!response?.params?.code ? "yes" : "no"}
+      </Text>
+      <Text style={[styles.text]}>Code Used: {codeUsed ? "yes" : "no"}</Text>
+      <Text style={styles.text}>{JSON.stringify(response)}</Text>
 
       {authError ? (
         <>
@@ -228,16 +238,13 @@ export default function Login() {
           <Text style={[styles.text, styles.error]}>{authError}</Text>
         </>
       ) : null}
-      {/* <Text style={[styles.heading]}>Redirect Uri:</Text>
-      <Text style={[styles.text]}>{redirectUri}</Text> */}
+      <Text style={[styles.heading]}>Redirect Uri:</Text>
+      <Text style={[styles.text]}>{redirectUri}</Text>
       <Text style={[styles.heading]}>Token Data:</Text>
       {user ? (
         <Text style={[styles.text]}>{JSON.stringify(user.decoded)}</Text>
       ) : null}
-      <Pressable
-        style={styles.box2}
-        onPress={() => navigation.navigate("Home")}
-      ></Pressable>
+      <Button title="Home" onPress={() => navigation.navigate("Home")} />
     </View>
   );
 }
@@ -266,5 +273,12 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
+  },
+  box2: {
+    width: "90%",
+    height: 100,
+    backgroundColor: "blue", // Example color
+    borderRadius: 20,
+    marginBottom: 20,
   },
 });
