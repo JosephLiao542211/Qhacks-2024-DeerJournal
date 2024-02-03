@@ -7,7 +7,7 @@ const HomeScreen = ({navigation}) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading} >
-        <Text> Your Streak </Text>
+        <Text style={styles.dolpino}> Your Streak </Text>
         <DateTimeSelector></DateTimeSelector>
       </View>
 
@@ -63,13 +63,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding:"5%"
   },
+  dolpino: {
+    fontFamily:'Dolpino',
+  },
   heading: {
     margin:"5%",
-    marginTop:"5%"
+    marginTop:"5%",
   },
   main: {
     flex: 1,
-    flexDirection: 'colum',
+    flexDirection: 'column',
     padding: 15,
   },
   box1: {

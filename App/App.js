@@ -7,22 +7,45 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Envision from './Envision';
 import PastLogs from './PastLogs';
 import Activity from './Activity';
+import { useCallback, useEffect } from 'react';
+
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
+
 const Stack = createNativeStackNavigator();
+
 const App = () => {
+  const [fontsLoaded, fontError] = useFonts({
+    "Dolpino": require('./assets/fonts/Dolpino.otf'),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{title: 'Welcome', headerShown: true}}
-        />
-        <Stack.Screen name="Journal" component={PresentJournal} />
-        <Stack.Screen name="Envision" component={Envision} />
-        <Stack.Screen name="Past Logs" component={PastLogs} />
-        <Stack.Screen name="Activity" component={Activity} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={appstyle.container} onLayout={onLayoutRootView}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{title: 'Welcome', headerShown: true}}
+          />
+          <Stack.Screen name="Journal" component={PresentJournal} />
+          <Stack.Screen name="Envision" component={Envision} />
+          <Stack.Screen name="Past Logs" component={PastLogs} />
+          <Stack.Screen name="Activity" component={Activity} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
   );
 };
 
