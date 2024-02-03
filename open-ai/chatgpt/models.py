@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 model = "gpt-3.5-turbo"
 
 load_dotenv()
-mood_conversation_history =[]
+
 api_key = os.environ.get('.env')
 client = openai.OpenAI(api_key=api_key)
 
@@ -25,9 +25,7 @@ def mood_detection_model(user_r):
     )
     if not (mood_model.choices[0].message.content == "happy" or mood_model.choices[0].message.content == "sad"):
         raise ValueError("The model's response is not 'happy' or 'sad'.")
-    mood_conversation_history.append({"role": "user", "content": user_r})
-    mood_conversation_history.append({"role": "assistant", "content": mood_model.choices[0].message.content})
-    return mood_model.choices[0].message.content, [mood_conversation_history, user_r]
+    return mood_model.choices[0].message.content
 
 def first_follow_up_q(model, prev_conversation_history):
     new_conversation_history = []

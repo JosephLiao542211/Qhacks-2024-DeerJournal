@@ -37,14 +37,14 @@ def main():
 
   # Detects mood from first question asked
   first_q_chat_r = models.mood_detection_model(first_user_r)
-  conversation_history = first_q_chat_r[1][0]
+  conversation_history.append({"role": "assistant", "content": first_q})
+  conversation_history.append({"role": "user", "content": first_user_r})
   # Responds to the child's mood with premade response and asks custom follow up question #1
-  if first_q_chat_r[0] == "happy":
-    print("That's great to hear!")
+  if first_q_chat_r == "happy":
+    print(first_sys_r_positive)
   else:
-    print("Oh no! I'm sorry to hear that!")
-  second_q_sys = models.first_follow_up_q("gpt-3.5-turbo", first_q_chat_r[1][0])
-  print(second_q_sys)
+    print(first_sys_r_negative)
+  second_q_sys = models.first_follow_up_q("gpt-3.5-turbo", conversation_history)
 
   # Adds response from user from first follow-up question to conversation history
   second_q_user_r = "I enjoyed learning about fractions I thought it was really interesting. I was slightly disappointed we didn't \
@@ -89,12 +89,13 @@ def main():
   print(vision_board_into)
 
   #Creates vision board images for user
-  vision_goals = vision_board_r_goals.split('\n')
-  image1 = models.vision_board_img(vision_goals[0])
-  image2 = models.vision_board_img(vision_goals[1])
-  image3 = models.vision_board_img(vision_goals[2])
-  extra_functions.save_display_img(image1)
-  extra_functions.save_display_img(image2)
-  extra_functions.save_display_img(image3)
-
+  # vision_goals = vision_board_r_goals.split('\n')
+  # image1 = models.vision_board_img(vision_goals[0])
+  # image2 = models.vision_board_img(vision_goals[1])
+  # image3 = models.vision_board_img(vision_goals[2])
+  # extra_functions.save_display_img(image1)
+  # extra_functions.save_display_img(image2)
+  # extra_functions.save_display_img(image3)
+  extra_functions.create_json(conversation_history)
 main()
+
