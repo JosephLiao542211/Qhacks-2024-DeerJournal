@@ -27,12 +27,12 @@ const HomeScreen = ({navigation}) => {
         <View style={styles.row}>
           <View style={styles.rowtwo}>
           <Pressable style={styles.box2} onPress={() =>
-            navigation.navigate('Activity')
+            navigation.navigate('Envision')
           }>
             <View></View>
           </Pressable>
           <Pressable style={styles.box3} onPress={() =>
-            navigation.navigate('Envision')
+            navigation.navigate('Activity')
           }>
             <View></View>
           </Pressable>
