@@ -8,16 +8,12 @@ const app = express();
 // Authorization middleware. When used, the Access Token must
 // exist and be verified against the Auth0 JSON Web Key Set.
 const jwtCheck = auth({
-    audience: 'http://localhost:3000',
-    issuerBaseURL: 'https://dev-lv87eip48bt5k7ku.us.auth0.com/',
+    audience: process.env.BASE_URL as string,
+    issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL as string,
     tokenSigningAlg: 'RS256'
 });
 
 const port = process.env.PORT || 3000;
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
 
 // This route doesn't need authentication
 app.get('/api/public', function(req, res) {
@@ -31,6 +27,10 @@ app.get('/api/private', jwtCheck, function(req, res) {
   res.json({
     message: 'Hello from a private endpoint! You need to be authenticated to see this.'
   });
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
 
 // async function run() {
