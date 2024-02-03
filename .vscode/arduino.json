@@ -1,0 +1,6 @@
+{
+    "board": "arduino:megaavr:uno2018",
+    "sketch": "Arduino\\Dino\\Dino.ino",
+    "port": "COM8",
+    "configuration": "mode=on"
+}
