@@ -44,6 +44,7 @@ const App = () => {
           <Stack.Screen name="Envision" component={Envision} />
           <Stack.Screen name="Past Logs" component={PastLogs} />
           <Stack.Screen name="Activity" component={Activity} />
+          <Stack.Screen name="Parents" component={Parents} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

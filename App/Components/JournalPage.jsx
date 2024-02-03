@@ -17,9 +17,10 @@ const styles = StyleSheet.create({
         
         padding: "5%",
         backgroundColor:"red",
-        margin:"30%",
+        marginHorizontal:"5%",
         height: "100%",
         borderRadius: 24,
+        
         
     }
   

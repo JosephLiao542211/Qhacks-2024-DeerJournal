@@ -8,25 +8,32 @@ const PastLogs = ({datetime}) => {
     <View>
       <View style={styles.heading}>
 
+      <Text style={styles.h3}>
+        Set a date:
+      </Text>
+
          <DateTimeSelector></DateTimeSelector>
+        
 
       </View>
       
         <View style={styles.heading}>
             <Text> {datetime} </Text>
         </View>
-       
-        <JournalPage text="asdasasd2123dasd" >
-            
-        </JournalPage>
+          <JournalPage text="asdasasd2123dasd" > </JournalPage>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
     heading: {
-        margin:"5%",
+        marginHorizontal:"5%",
         marginTop:"5%"
+      },
+      h3: {
+        fontFamily: "Dolpino",
+        fontSize: 18,
+        color:"#000",
       },
   
 });

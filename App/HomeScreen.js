@@ -56,7 +56,8 @@ const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.dolpino}> Your Streak </Text>
+        <Text style={styles.h1}>Howdy,{"\n"}Olivia!</Text>
+        <Text style={styles.h3}> Your Streak </Text>
         <DateTimeSelector></DateTimeSelector>
       </View>
 
@@ -115,22 +116,59 @@ const HomeScreen = ({ navigation }) => {
               <Text style={styles.h2}> Past {"\n"} Logs </Text>
             </View>
           </Pressable>
+
+          
+
         </View>
+        <Pressable
+            style={styles.box5}
+            onPress={() => navigation.navigate("Parents")}
+          >
+            <View style={styles.imgcontainergoals}>
+              
+              <Text style={styles.h2a}> Parent Mode </Text>
+            </View>
+          </Pressable>
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+
+  h1: {
+    fontFamily: "Dolpino",
+    fontSize: 50,
+    padding:"2%",
+    color:"#",
+  },
+
   h2: {
+    fontFamily: "Dolpino",
     fontSize: 34,
+    padding:"2%",
+    color:"#FFF",
+  },
+
+  h2a: {
+    fontFamily: "Dolpino",
+    fontSize: 34,
+    // padding:"2%",
+    color:"#FFF",
+  },
+
+  h3: {
+    fontFamily: "Dolpino",
+    fontSize: 18,
+    padding:"2%",
+    color:"#7097FA",
   },
   container: {
     flex: 1,
     padding: "5%",
   },
   dolpino: {
-    fontFamily: "Dolpino",
+    
   },
   heading: {
     margin: "5%",
@@ -244,6 +282,24 @@ const styles = StyleSheet.create({
     // position: 'relative', // Use relative positioning
     top: 5,
     transform: [{ scale: 1.3 }],
+  },
+
+  box5: {
+    width: "100%",
+    height: 100,
+    backgroundColor: "#65D977", // Example color
+    borderRadius: 20,
+    marginBottom: 20,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.39,
+    shadowRadius: 8.3,
+
+    elevation: 7,
   },
 });
 
