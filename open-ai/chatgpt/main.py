@@ -3,7 +3,6 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 import models
-import extra_functions
 
 api_key = os.environ.get('.env')
 client = OpenAI(api_key=api_key)
@@ -43,7 +42,7 @@ def main():
     print("That's great to hear!")
   else:
     print("Oh no! I'm sorry to hear that!")
-  second_q_sys = models.follow_up_q("gpt-3.5-turbo", first_q_chat_r[1][0])
+  second_q_sys = models.first_follow_up_q("gpt-3.5-turbo", first_q_chat_r[1][0])
   print(second_q_sys)
 
   # Adds response from second_user from first follow-up question to conversation history
@@ -51,6 +50,16 @@ def main():
   win the soccer game but I was happy with how close the match was."
   conversation_history.append({"role": "assistant", "content": second_q_sys})
   conversation_history.append({"role": "user", "content": second_q_user_r})
-  third_q_sys = models.follow_up_q("gpt-3.5-turbo", conversation_history)
+  third_q_sys = models.second_follow_up_q("gpt-3.5-turbo", conversation_history)
   print(third_q_sys)
+
+  #Adds response from third_user from second follow-up question to conversation history
+  third_q_user_r = "I think I learned a lot about playing soccer and I think it showed me the importance the journey of what I do, \
+  rather than just focusing on the destination of my goals."
+  conversation_history.append({"role": "assistant", "content": third_q_sys})
+  conversation_history.append({"role": "user", "content": third_q_user_r})
+
+  # Follows up with user after second-follow up question response and asks about goals
+  print(models.r_second_follow_up_q("gpt-3.5-turbo", conversation_history))
+  print(gratitude_q)
 main()
