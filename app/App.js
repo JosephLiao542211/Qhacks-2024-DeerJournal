@@ -8,6 +8,7 @@ import Envision from './Envision';
 import PastLogs from './PastLogs';
 import Activity from './Activity';
 import { useCallback, useEffect } from 'react';
+// import Login from './Components/Login';
 
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
