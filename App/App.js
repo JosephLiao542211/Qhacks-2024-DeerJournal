@@ -7,6 +7,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Envision from './Envision';
 import PastLogs from './PastLogs';
 import Activity from './Activity';
+import Parents from './Parents';
 import { useCallback, useEffect } from 'react';
 // import Login from './Components/Login';
 

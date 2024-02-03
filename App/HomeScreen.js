@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import DateTimeSelector from "./Components/DatetimeSelector";
 import GalleryVB from "./Components/Gallery";
+import Parents from "./Parents";
 const balh = {
   _bodyBlob: {
     _data: {
