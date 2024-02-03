@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   StatusBar,
+  TextInput,
 } from 'react-native';
 
 const DATA = [
@@ -23,17 +24,21 @@ const DATA = [
   },
   
   
+  
 ];
 
 const Item = ({title}) => (
   <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
+    <TextInput style={styles.title} multiline={true} blurOnSubmit={true} >{title} </TextInput>
   </View>
 );
 
 const GoalList = () => {
   return (
     <SafeAreaView style={styles.container}>
+      <Text>
+        Monthly Goals
+      </Text>
       <FlatList
         data={DATA}
         renderItem={({item}) => <Item title={item.title} />}
@@ -47,14 +52,18 @@ export default GoalList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginHorizontal:20,
+    marginBottom: "20%", 
     marginTop: StatusBar.currentHeight || 0,
-    backgroundColor: "#000000"
+    
   },
   item: {
     backgroundColor: '#f9c2ff',
-    padding: 20,
+    padding: 35,
+    width:"100%",
     marginVertical: 8,
-    marginHorizontal: 16,
+    // marginHorizontal: 0,
+    borderRadius: 30,
   },
   title: {
     fontSize: 32,
