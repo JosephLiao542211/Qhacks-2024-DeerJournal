@@ -1,15 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, Image } from 'react-native';
+import DateTimeSelector from './Components/DatetimeSelector';
+import GalleryVB from './Components/Gallery';
 
 const HomeScreen = ({navigation}) => {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.heading}>
         <Text> Your Streak </Text>
+        <DateTimeSelector></DateTimeSelector>
       </View>
+
       <View style={styles.main}>
         {/* Main Section */}
         <View style={styles.box1}></View>
+        <View id=" Visionboard" style={styles.box1}>
+          <GalleryVB></GalleryVB>
+        </View>
         <View style={styles.row}>
           <View style={styles.rowtwo}>
           <View style={styles.box2}></View>
@@ -18,15 +25,32 @@ const HomeScreen = ({navigation}) => {
 
           <View style={styles.box4}></View>
         </View>
+        
+        <Button
+          title="Go to Jane's profile"
+          onPress={() =>
+            navigation.navigate('Journal')
+          }
+        />
+        <Button
+          title="Envision"
+          color={"red"}
+          onPress={() =>
+            navigation.navigate('Envision')
+          }
+        />
+        <Button
+          title="PastLogs"
+          color={"red"}
+          onPress={() =>
+            navigation.navigate('Envision')
+          }
+        />
+        
       </View>
 
-      <Button
-      title="Go to Jane's profile"
-      onPress={() =>
-        navigation.navigate('Journal')
-      }
-    />
-    </View>
+      
+    </ScrollView>
   );
 };
 
@@ -34,10 +58,11 @@ const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding:"5%"
   },
   heading: {
     margin:"5%",
-    marginTop:"20%"
+    marginTop:"5%"
   },
   main: {
     flex: 1,
