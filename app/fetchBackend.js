@@ -15,12 +15,15 @@ export function testBackend() {
     });
 }
 
-export function testBackend() {
+export function testQuestion() {
   fetch("http://10.216.196.221:3000/api/getQuestion", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-    },
+      },
+      body: {
+        "happpy": 1
+    }
   })
     .then((response) => response.json())
     .then((data) => {

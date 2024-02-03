@@ -2,27 +2,31 @@
 //https://auth0.com/blog/backend-for-frontend-pattern-with-auth0-and-dotnet/
 //https://developer.auth0.com/resources/code-samples/full-stack/hello-world/basic-access-control/spa/react-typescript/express-typescript
 
-
 import { MongoClient } from "mongodb";
-import express from 'express';
-import logger from 'morgan';
-import { auth, requiredScopes } from 'express-oauth2-jwt-bearer'
-import helmet from "helmet"
-import nocache from "nocache"
-import cors from "cors"
+import express from "express";
+import logger from "morgan";
+import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
+import helmet from "helmet";
+import nocache from "nocache";
+import cors from "cors";
 import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
-
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+app.get("/api/test", (req: any, res: any) => {
+  res.json({
+    message:
+      "Hello from a public endpoint! You don't need to be authenticated to see this.",
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
 
 // // Authorization middleware. When used, the Access Token must
 // // exist and be verified against the Auth0 JSON Web Key Set.
@@ -37,7 +41,7 @@ app.listen(PORT, () => {
 // // This route doesn't need authentication
 // app.get('/api/login', function (req, res) {
 //   // TODO: The backend uses OpenID connect with Auth0 to authenticate the user and getting the id, access, and refresh tokens.
-  
+
 //   // TODO: The backend stores the user's tokens in a cache.
 
 //   // TODO: An encrypted cookie is issued for the frontend representing the user authentication session.
