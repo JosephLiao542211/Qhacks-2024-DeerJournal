@@ -53,6 +53,38 @@ app.use((req, res, next) => {
 });
 app.use(nocache());
 
+// app.get(`/api/`, (req, res) => {
+//   child_process.exec('ls', (error, stdout, stderr) => {
+//   res.json({ message: "Hello from the server!" });
+// }
+
+const { exec } = require('child_process');
+
+// Path to your Python script
+const pythonScriptPath = 'openai-and-opencv/opencv/main.py';
+
+// Asks first question
+// Execute the Python script
+const first_question = 'q1'
+const second_response = 'r2'
+const third_response = 'r3'
+const fourth_response = 'r4'
+const fifth_response = 'r5'
+const sixth_response = 'r6'
+
+exec(`python ${pythonScriptPath} "${first_question}"`, (error: Error, stdout : string, stderr : string) => {
+  if (error) {
+    console.error(`exec error: ${error}`);
+    return;
+  }
+
+  // Output from the script
+  console.log(`stdout: ${stdout}`);
+  if (stderr) {
+    console.error(`stderr: ${stderr}`);
+  }
+});
+
 app.use(
   cors({
     origin: CLIENT_ORIGIN_URL,
