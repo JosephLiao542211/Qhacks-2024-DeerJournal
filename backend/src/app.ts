@@ -34,7 +34,7 @@ app.listen(port, () => {
 });
 
 // async function run() {
-//   const uri = process.env.MONGODB_KEY as string;
+//   const uri = process.env.MONGODB_URL as string;
 
 //   // The MongoClient is the object that references the connection to our
 //   // datastore (Atlas, for example)
