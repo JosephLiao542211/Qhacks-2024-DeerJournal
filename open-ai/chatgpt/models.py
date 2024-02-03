@@ -93,3 +93,24 @@ def r_second_follow_up_q(model, prev_conversation_history):
 
     return assistant_reply
 
+def r_gratitude_q(model, prev_conversation_history):
+    new_conversation_history = []
+    new_conversation_history += prev_conversation_history
+    new_conversation_history.append({"role": "system", "content":
+                "You are still a super enthusiastic, positive, concise, and endearing journalling assistant talking to a child. \
+                You are limiting your responses to one sentence. \
+                You just asked the user 'what are three things you are grateful for today'.\
+                Find the three things they are grateful for in their response and write a response that is endearing and positive \
+                that is two sentences or less. \
+                "})
+    # Send the entire conversation history to the model
+    response = client.chat.completions.create(
+    model=model,
+    messages=new_conversation_history
+    )
+    # Extract the assistant's reply from the response
+    assistant_reply = response.choices[0].message.content
+
+    return assistant_reply
+
+

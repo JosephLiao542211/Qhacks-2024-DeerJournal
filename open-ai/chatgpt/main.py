@@ -14,8 +14,7 @@ first_q = 'How was your day today? Recount what happened.'
 first_sys_r_positive = "That's great to hear!"
 first_sys_r_negative = "Oh no! I'm sorry to hear that!"
 gratitude_q = "What are three things you are grateful for today?"
-vision_month_q = "What are 3 things you want to accomplish this month?"
-vision_tomorrow_q = "What is one thing you want to do better tomorrow?"
+vision_month_q = "What are 3 things you want to accomplish in a month?"
 
 def main():
   conversation_history = []
@@ -45,7 +44,7 @@ def main():
   second_q_sys = models.first_follow_up_q("gpt-3.5-turbo", first_q_chat_r[1][0])
   print(second_q_sys)
 
-  # Adds response from second_user from first follow-up question to conversation history
+  # Adds response from user from first follow-up question to conversation history
   second_q_user_r = "I enjoyed learning about fractions I thought it was really interesting. I was slightly disappointed we didn't \
   win the soccer game but I was happy with how close the match was."
   conversation_history.append({"role": "assistant", "content": second_q_sys})
@@ -53,13 +52,28 @@ def main():
   third_q_sys = models.second_follow_up_q("gpt-3.5-turbo", conversation_history)
   print(third_q_sys)
 
-  #Adds response from third_user from second follow-up question to conversation history
+  #Adds response from user from second follow-up question to conversation history
   third_q_user_r = "I think I learned a lot about playing soccer and I think it showed me the importance the journey of what I do, \
   rather than just focusing on the destination of my goals."
   conversation_history.append({"role": "assistant", "content": third_q_sys})
   conversation_history.append({"role": "user", "content": third_q_user_r})
 
-  # Follows up with user after second-follow up question response and asks about goals
-  print(models.r_second_follow_up_q("gpt-3.5-turbo", conversation_history))
+  # Responds to second follow up question response and asks gratitude question
+  second_follow_up_r_r = models.r_second_follow_up_q("gpt-3.5-turbo", conversation_history)
+  print(second_follow_up_r_r)
   print(gratitude_q)
+
+  #Adds response from third_user from second follow-up question to conversation history, gratitude question, and response
+  gratitude_r = "I am grateful for my friends, my family, and my teacher."
+  conversation_history.append({"role": "assistant", "content": second_follow_up_r_r})
+  conversation_history.append({"role": "assistant", "content": gratitude_q})
+  conversation_history.append({"role": "user", "content": gratitude_r})
+
+  # Responds to gratitude question and asks vision question. User responds to vision question
+  r_gratitude_q = models.r_gratitude_q("gpt-3.5-turbo", conversation_history)
+  print(r_gratitude_q)
+  print("Weekly Vision Board: " + vision_month_q)
+  
+  # Child's response to vision board question and vision board question
+  vision_board_r = "I want to get better at soccer, I want to learn more about fractions, and I want to make more friends."
 main()
