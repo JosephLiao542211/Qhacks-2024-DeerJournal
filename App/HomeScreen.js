@@ -1,51 +1,54 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, Image, Pressable } from 'react-native';
 import DateTimeSelector from './Components/DatetimeSelector';
 import GalleryVB from './Components/Gallery';
 
 const HomeScreen = ({navigation}) => {
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.heading}>
+      <View style={styles.heading} >
         <Text> Your Streak </Text>
         <DateTimeSelector></DateTimeSelector>
       </View>
 
       <View style={styles.main}>
         {/* Main Section */}
-        <View style={styles.box1}></View>
-        <View id=" Visionboard" style={styles.box1}>
+        <Pressable style={styles.box1} onPress={() =>
+            navigation.navigate('Journal')
+          } >
+          <View ></View>
+        </Pressable>
+        
+
+        <View id="Visionboard" style={styles.box1}>
           <GalleryVB></GalleryVB>
         </View>
+
         <View style={styles.row}>
           <View style={styles.rowtwo}>
-          <View style={styles.box2}></View>
-          <View style={styles.box3}></View>
+          <Pressable style={styles.box2} onPress={() =>
+            navigation.navigate('Activity')
+          }>
+            <View></View>
+          </Pressable>
+          <Pressable style={styles.box3} onPress={() =>
+            navigation.navigate('Envision')
+          }>
+            <View></View>
+          </Pressable>
           </View>
-
-          <View style={styles.box4}></View>
-        </View>
+          <Pressable style={styles.box4} onPress={() =>
+            navigation.navigate('Past Logs')}>
+            <View >
+              <Text>
+                Past Logs
+              </Text>
+            </View>
+            </Pressable>
+          </View>
         
-        <Button
-          title="Go to Jane's profile"
-          onPress={() =>
-            navigation.navigate('Journal')
-          }
-        />
-        <Button
-          title="Envision"
-          color={"red"}
-          onPress={() =>
-            navigation.navigate('Envision')
-          }
-        />
-        <Button
-          title="PastLogs"
-          color={"red"}
-          onPress={() =>
-            navigation.navigate('Envision')
-          }
-        />
+        
+       
         
       </View>
 
