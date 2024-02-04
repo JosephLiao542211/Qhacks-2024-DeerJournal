@@ -111,6 +111,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
           </Pressable>
       </View>
+      
     </ScrollView>
   );
 };
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
   },
   flag: {
     // position: 'relative', // Use relative positioning
-    top: 14,
+    top: 20,
   },
   clock: {
     // position: 'relative', // Use relative positioning

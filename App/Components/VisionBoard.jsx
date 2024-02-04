@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { View, Image, ScrollView, StyleSheet, Dimensions, FlatList } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { useGoals } from "../goalsContext";
+import GenBtn from "./GenBtn";
 
-const VisionBoard = () => {
+const VisionBoard = ({navigation}) => {
   const { goalImageUrlPairs } = useGoals();
   const imageUrls = Object.values(goalImageUrlPairs);
   const images = imageUrls ? [...imageUrls] : [];
@@ -12,13 +13,20 @@ const VisionBoard = () => {
 
 
   return (
-    <FlatList
+    <View>
+
+    
+    <FlatList 
+      style={styles.container}
       data={images}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item }) => (
         <Image source={{ uri: item }} style={styles.image} />
       )}
     />
+    <GenBtn pressed={() => navigation.navigate("Home")} text={"Return Home"} bg={"#86A7FC"} ></GenBtn>
+
+    </View>
   );
 };
 
@@ -32,7 +40,9 @@ const styles = StyleSheet.create({
   image: {
     width: Dimensions.get("window").width,
     height: 200,
-    right: 30,
+    borderRadius:20,
+    margin: "5%",
+    // right: 30,
     resizeMode: "cover",
   },
   pagination: {
