@@ -10,6 +10,9 @@ import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
 
+import * as Chat from "./models"
+
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -21,13 +24,11 @@ app.get("/api/test", (req: any, res: any) => {
   });
 });
 
-app.get("/api/chat", (req: any, res: any) => {
-  console.log(req.json());
+app.get("/api/chat/getQuestion", (req: any, res: any) => {
   res.json({
-    message:
-      "",
-  })
-})
+    history: Chat.getFirst()
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
