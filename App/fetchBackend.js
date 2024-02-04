@@ -192,3 +192,23 @@ export async function summarize(chatlog) {
     return null;
   }
 }
+
+export async function getImageUrl(prompt) {
+    const requestBody = {
+      prompt: prompt,
+    };
+    try {
+      const response = await fetch("http://10.216.196.221:3000/api/imageGen", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      return data.imageUrl;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }

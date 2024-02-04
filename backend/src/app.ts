@@ -15,12 +15,28 @@ import * as Chat from "./models"
 
 
 const gpt_model = "gpt-3.5-turbo";
+import { Request, Response } from "express";
+import generateImage from "./imageGen";
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.post("/api/imageGen", async (req: Request, res: Response) => {
+  const prompt = req.body.prompt;
+  console.log(prompt)
+  const imageUrl = await generateImage(prompt);
+  console.log(imageUrl)
+  res.json({
+    imageUrl: imageUrl
+  });
+  // res.json({
+  //   imageUrl:
+  //     "https://t3.ftcdn.net/jpg/00/92/53/56/240_F_92535664_IvFsQeHjBzfE6sD4VHdO8u5OHUSc6yHF.jpg",
+  // });
+});
 
 app.get("/api/test", (req: any, res: any) => {
   res.json({

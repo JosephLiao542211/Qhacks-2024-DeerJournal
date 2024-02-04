@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import GenBtn from './GenBtn';
-
+import React, { useState, useEffect, useRef } from "react";
+import GenBtn from "./GenBtn";
+import { useGoals } from "../goalsContext";
 
 import {
   SafeAreaView,
@@ -11,31 +11,15 @@ import {
   StatusBar,
   TextInput,
   Button,
-  Pressable,
-} from 'react-native';
-
-const initialData = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Start Typing....',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Start Typing....',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Start Typing....',
-  },
-];
+} from "react-native";
 
 const Item = ({ title, onDelete }) => (
   <View style={styles.item}>
-    <TextInput 
-      style={styles.p1} 
-      multiline={true} 
+    <TextInput
+      style={styles.title}
+      multiline={true}
       blurOnSubmit={true}
-    // Set a max height for the text input
+      // Set a max height for the text input
     >
       {title}
     </TextInput>
@@ -51,49 +35,78 @@ const Item = ({ title, onDelete }) => (
 );
 
 const GoalList = () => {
-  const [data, setData] = useState(initialData);
+  const { goalImageUrlPairs, removeGoal, addGoal, editGoal } = useGoals();
 
-  const addItem = () => {
-    const newItem = {
-      id: Math.random().toString(),
-      title: `Start Typing....`,
-    };
-    setData([...data, newItem]);
-  };
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const deleteItem = (itemId) => {
-    const updatedData = data.filter((item) => item.id !== itemId);
-    setData(updatedData);
-  };
+  useEffect(() => {
+    if (isInputFocused) {
+      inputRef.current.focus();
+    }
+  }, [isInputFocused]);
 
+  const [loadingGoal, setLoadingGoal] = useState(null);
+
+  useEffect(() => {
+    setLoadingGoal(null);
+  }, [goalImageUrlPairs]);
+
+  const [newGoal, setNewGoal] = useState(null);
+  const inputRef = useRef(null);
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.h1}>Monthly Goals</Text>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {data.map((item) => (
+        {/* {data.map((item) => (
           <Item key={item.id} title={item.title} onDelete={() => deleteItem(item.id)} />
+        ))} */}
+        {Object.keys(goalImageUrlPairs).map((item, index) => (
+          <Item key={item} title={item} onDelete={() => removeGoal(item)} />
         ))}
+        {loadingGoal ? <Item title={loadingGoal} /> : null}
+
         {/* <Button title="Add Item" onPress={addItem}/> */}
-        <GenBtn text={"Add Goals"} bg={"#D9D9D9"} pressed={addItem} ></GenBtn>
+        {isInputFocused ? (
+          <TextInput
+            ref={inputRef}
+            onChangeText={(text) => {
+              setNewGoal(text);
+            }}
+            onBlur={() => {
+              addGoal(newGoal);
+              setLoadingGoal(newGoal);
+              console.log("updated", goalImageUrlPairs);
+              setIsInputFocused(false);
+            }}
+            // Other props...
+          />
+        ) : (
+          <GenBtn
+            text={"Add Item"}
+            bg={"#D9D9D9"}
+            pressed={() => {
+              setIsInputFocused(true);
+            }}
+          />
+        )}
       </ScrollView>
-      
-      <GenBtn text={"Generate Vision"} bg={"#65D977"}></GenBtn>
+
+      <GenBtn text={"Generate"} bg={"green"}></GenBtn>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  h2:{
-    fontSize:34,
+  h2: {
+    fontSize: 34,
   },
-  p1:{
-    fontSize:18,
+  p1: {
+    fontSize: 18,
   },
 
   container: {
     flex: 1,
     margin: "5%",
-  
   },
   scrollViewContent: {
     paddingBottom: 20, // Adjust padding to include the button
@@ -101,12 +114,12 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: '#86A7FC',
     padding: 15,
-    width: '100%',
+    width: "100%",
     marginVertical: 8,
     borderRadius: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   title: {
     fontSize: 32,

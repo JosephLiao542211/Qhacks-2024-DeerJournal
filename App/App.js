@@ -10,10 +10,12 @@ import Activity from './Activity';
 import Parents from './Parents';
 import SummaryJournal from './SummaryJournal';
 import { useCallback, useEffect } from 'react';
+import { GoalsProvider } from "./goalsContext";
+import VisionBoard from "./Components/VisionBoard";
 // import Login from './Components/Login';
 
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,7 +23,7 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [fontsLoaded, fontError] = useFonts({
-    "Dolpino": require('./assets/fonts/Dolpino.otf'),
+    Dolpino: require("./assets/fonts/Dolpino.otf"),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -34,6 +36,7 @@ const App = () => {
     return null;
   }
   return (
+    <GoalsProvider>
     <View style={appstyle.container} onLayout={onLayoutRootView}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -48,9 +51,11 @@ const App = () => {
           <Stack.Screen name="Past Logs" component={PastLogs} />
           <Stack.Screen name="Activity" component={Activity} />
           <Stack.Screen name="Parents" component={Parents} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </View>
+          <Stack.Screen name="Vision Board" component={VisionBoard} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </View>
+    </GoalsProvider>
   );
 };
 
@@ -60,7 +65,4 @@ const appstyle = StyleSheet.create({
   },
 });
 
-
 export default App;
-
-
