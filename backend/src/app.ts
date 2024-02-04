@@ -6,9 +6,6 @@ import { MongoClient } from "mongodb";
 import express from "express";
 import logger from "morgan";
 import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
-import helmet from "helmet";
-import nocache from "nocache";
-import cors from "cors";
 import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
@@ -23,6 +20,14 @@ app.get("/api/test", (req: any, res: any) => {
       "Hello from a public endpoint! You don't need to be authenticated to see this.",
   });
 });
+
+app.get("/api/chat", (req: any, res: any) => {
+  console.log(req.json());
+  res.json({
+    message:
+      "",
+  })
+})
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

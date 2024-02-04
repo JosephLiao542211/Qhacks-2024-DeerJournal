@@ -30,6 +30,7 @@ const PresentJournal = () => {
   let nextQuestion = null;
   const [hasAnswered, setHasAnswered] = useState(false);
 
+
   async function startRecording() {
     try {
       if (permissionResponse.status !== "granted") {
@@ -71,7 +72,6 @@ const PresentJournal = () => {
           <Text>{question}</Text>
         </View>
       </View>
-      {hasAnswered ? (
         <View style={styles.box2}>
           <TextInput
             style={styles.whitetext}
@@ -80,15 +80,15 @@ const PresentJournal = () => {
             onChangeText={(text) => {
               setAnswer({ text });
             }}
-          />
+          />     
         </View>
-      ) : (
-        <View style={styles.box2}>
-          <Text>{answerResponse}</Text>
-        </View>
-      )}
 
-      <Pressable
+      {hasAnswered ?
+        <View style={styles.box5}>
+          <Text>TEXT!</Text>   
+        </View> : null}
+
+      {/* <Pressable
         style={styles.box3}
         onPress={() => {
           recording ? stopRecording() : startRecording();
@@ -121,31 +121,31 @@ const PresentJournal = () => {
             </Svg>
           )}
         </View>
-      </Pressable>
+      </Pressable> */}
       {hasAnswered ? (
         <Pressable
           style={styles.box4}
           onPress={() => {
-            const followUp = getFollowUp();
-            nextQuestion = followUp.question;
-            setAnswerResponse(followUp.answerResponse);
-            setHasAnswered(true);
+            // const followUp = getFollowUp();
+            // nextQuestion = followUp.question;
+            // setAnswerResponse(followUp.answerResponse);
+            setHasAnswered(false);
           }}
         >
           <View>
-            <Text>Submit</Text>
+            <Text>Next</Text>
           </View>
         </Pressable>
       ) : (
         <Pressable
           style={styles.box4}
           onPress={() => {
-            setPrevQuestions(prevQuestions.push(question));
+            setPrevQuestions(prevQuestions+[question]);
             setQuestion(nextQuestion);
             nextQuestion = null;
-            setPrevAnswers(prevAnswers.push(answer));
+            setPrevAnswers(prevAnswers+[answer]);
             setAnswer(null);
-            setHasAnswered(false);
+            setHasAnswered(true);
             setQuestionNumber(questionNumber + 1);
           }}
         >
@@ -206,7 +206,13 @@ const styles = StyleSheet.create({
     backgroundColor: "yellow", // Example color
     borderRadius: 20,
   },
-
+  box5: {
+    width: "90%",
+    height: 75,
+    backgroundColor: "gray", // Example color
+    borderRadius: 20,
+    marginBottom: 20,
+  },
   row: {
     flex: 1,
     flexDirection: "row",
