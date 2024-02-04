@@ -10,49 +10,12 @@ import {
   Pressable,
 } from "react-native";
 import DateTimeSelector from "./Components/DatetimeSelector";
-import GalleryVB from "./Components/Gallery";
-const balh = {
-  _bodyBlob: {
-    _data: {
-      __collector: [Object],
-      blobId: "76CA2A0F-429B-46B9-B531-CC8F70AAC951",
-      name: "test.json",
-      offset: 0,
-      size: 91,
-      type: "application/json",
-    },
-  },
-  _bodyInit: {
-    _data: {
-      __collector: [Object],
-      blobId: "76CA2A0F-429B-46B9-B531-CC8F70AAC951",
-      name: "test.json",
-      offset: 0,
-      size: 91,
-      type: "application/json",
-    },
-  },
-  bodyUsed: true,
-  headers: {
-    map: {
-      connection: "keep-alive",
-      "content-length": "91",
-      "content-type": "application/json; charset=utf-8",
-      date: "Sat, 03 Feb 2024 20:20:06 GMT",
-      etag: 'W/"5b-R5PUwWAV65BKRSBOyVzmur6/cEs"',
-      "keep-alive": "timeout=5",
-      "x-powered-by": "Express",
-    },
-  },
-  ok: true,
-  status: 200,
-  statusText: "",
-  type: "default",
-  url: "http://10.216.196.221:3000/api/test",
-};
+import ImageGallery from "./Components/Gallery";
+import { useGoals } from "./goalsContext";
 
 const HomeScreen = ({ navigation }) => {
-  const [backendResponse, setBackendResponse] = useState("");
+  const { goalImageUrlPairs } = useGoals();
+  console.log(goalImageUrlPairs);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading}>
@@ -61,7 +24,6 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.main}>
-        <Text>{backendResponse}</Text>
         <Pressable
           style={styles.box1}
           onPress={() => navigation.navigate("Journal")}
@@ -74,10 +36,11 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.h2}> Daily {"\n"} Journal </Text>
           </View>
         </Pressable>
-
-        <View id="Visionboard" style={styles.box1}>
-          <GalleryVB></GalleryVB>
-        </View>
+        <Pressable onPress={() => navigation.navigate("Vision Board")}>
+          <View id="Visionboard" style={styles.box1}>
+            <ImageGallery imageUrls={Object.values(goalImageUrlPairs)} />
+          </View>
+        </Pressable>
 
         <View style={styles.row}>
           <View style={styles.rowtwo}>

@@ -19,11 +19,20 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.get("/api/imageGen", (req: Request, res: Response) => {
-  const message = req.body.message;
+app.use(express.json());
+
+app.post("/api/imageGen", async (req: Request, res: Response) => {
+  const prompt = req.body.prompt;
+  console.log(prompt)
+  const imageUrl = await generateImage(prompt);
+  console.log(imageUrl)
   res.json({
-    imageUrl: generateImage(message),
+    imageUrl: imageUrl
   });
+  // res.json({
+  //   imageUrl:
+  //     "https://t3.ftcdn.net/jpg/00/92/53/56/240_F_92535664_IvFsQeHjBzfE6sD4VHdO8u5OHUSc6yHF.jpg",
+  // });
 });
 
 app.get("/api/test", (req: any, res: any) => {
