@@ -108,7 +108,7 @@ const PresentJournal = ({navigation}) => {
         />     
       </View>
       {(hasAnswered && answerResponse) ?
-        <ScrollView style={styles.box5}>
+        <ScrollView style={styles.box1}>
           <Text>{answerResponse}</Text>   
         </ScrollView> : null}
 
@@ -218,11 +218,13 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   p1: {
+
     fontFamily: "Dolpino",
     fontSize: 18,
     color:"#000",
   },
   box1: {
+    padding:"5%",
     width: "100%",
     backgroundColor: "#FEC27B", // Example color
     borderRadius: 20,
