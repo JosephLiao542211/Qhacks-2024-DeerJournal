@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import * as Speech from "expo-speech";
-import { getFirstQuestion, getFollowUp, getNext, getTts } from "./fetchBackend";
+import { getFirstQuestion, summarize, getNext, getTts } from "./fetchBackend";
 import GenBtn from "./Components/GenBtn";
 import * as FileSystem from "expo-file-system";
 

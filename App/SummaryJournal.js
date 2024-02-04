@@ -20,11 +20,7 @@ const SummaryJournal = ({navigation}) => {
         <Text style={styles.h1} >Almost Done!</Text>
         <GenBtn pressed={() => navigation.navigate("Home")} text={"Log it!"} bg={"#65D977"} ></GenBtn>
         <JournalPage text = {route.params?.response} />
-
       </View>
-      
-      <JournalPage text = {text} />
-      
       
     
   );
