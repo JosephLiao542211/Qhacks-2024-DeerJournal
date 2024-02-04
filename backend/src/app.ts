@@ -9,6 +9,7 @@ import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
+// import multer from "multer";
 
 import * as Chat from "./models"
 
@@ -33,6 +34,42 @@ app.get("/api/chat/getQuestion", (req: any, res: any) => {
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+
+// // Set storage engine
+// const storage = multer.diskStorage({
+//   destination: function(req, file, cb) {
+//     cb(null, 'uploads/') // Make sure this folder exists in your project directory
+//   },
+//   filename: function(req, file, cb) {
+//     cb(null, file.fieldname + '-' + Date.now() + '-' + file.originalname)
+//   }
+// });
+
+// // Initialize upload
+// const upload = multer({ storage: storage });
+
+// // Route to upload an audio file
+// app.post('/upload-audio', upload.single('audioFile'), (req, res) => {
+//   // req.file is the `audioFile` file
+//   // req.body will hold the text fields, if there were any
+
+//   if (!req.file) {
+//     return res.status(400).send('No file uploaded.');
+//   }
+
+  // Process the file here (e.g., save file info to database)
+
+  // Respond to the client
+//   res.send({
+//     message: 'File uploaded successfully.',
+//     fileInfo: {
+//       originalName: req.file.originalname,
+//       mimeType: req.file.mimetype,
+//       size: req.file.size
+//     }
+//   });
+// });
 
 // // Authorization middleware. When used, the Access Token must
 // // exist and be verified against the Auth0 JSON Web Key Set.
