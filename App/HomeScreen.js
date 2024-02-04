@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     margin: "5%",
-    marginTop: "5%",
+    marginTop: "10%",
   },
   main: {
     flex: 1,

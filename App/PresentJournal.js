@@ -109,7 +109,7 @@ const PresentJournal = ({navigation}) => {
       </View>
       {(hasAnswered && answerResponse) ?
         <ScrollView style={styles.box1}>
-          <Text>{answerResponse}</Text>   
+          <Text style={styles.p1}>{answerResponse}</Text>   
         </ScrollView> : null}
 
       {/* <Pressable
