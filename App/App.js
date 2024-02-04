@@ -7,6 +7,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Envision from './Envision';
 import PastLogs from './PastLogs';
 import Activity from './Activity';
+import Parents from './Parents';
+import SummaryJournal from './SummaryJournal';
 import { useCallback, useEffect } from 'react';
 // import Login from './Components/Login';
 
@@ -38,12 +40,14 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={HomeScreen}
-            options={{title: 'Welcome', headerShown: true}}
+            options={{title: 'Welcome', headerShown: false}}
           />
           <Stack.Screen name="Journal" component={PresentJournal} />
+          <Stack.Screen name="Summary" component={SummaryJournal} />
           <Stack.Screen name="Envision" component={Envision} />
           <Stack.Screen name="Past Logs" component={PastLogs} />
           <Stack.Screen name="Activity" component={Activity} />
+          <Stack.Screen name="Parents" component={Parents} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

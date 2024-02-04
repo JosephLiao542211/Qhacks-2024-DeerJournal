@@ -1,13 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Pressable, TextInput,TouchableWithoutFeedback, Keyboard, ScrollView } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import * as Speech from "expo-speech";
 import { Audio } from "expo-av";
-import { getFirstQuestion, getFollowUp } from "./fetchBackend";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { getFirstQuestion, getFollowUp, getNext } from "./fetchBackend";
+import GenBtn from "./Components/GenBtn";
 
-const PresentJournal = () => {
+const PresentJournal = ({navigation}) => {
   // async function getQuestion(prevQuestions, prevAnswers) {
   //   if (prevQuestions.length == 0) {
   //     const firstQuestion = getFirstQuestion();
@@ -19,16 +19,29 @@ const PresentJournal = () => {
   // }
   const [prevQuestions, setPrevQuestions] = useState([]);
   const [prevAnswers, setPrevAnswers] = useState([]);
-  const [question, setQuestion] = useState(
-    getFirstQuestion(prevQuestions, prevAnswers)
-  );
-  const [answer, setAnswer] = useState(null);
+  const [chatlog, setChatlog] = useState([]);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [answerResponse, setAnswerResponse] = useState("");
   const [questionNumber, setQuestionNumber] = useState(0);
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
-  let nextQuestion = null;
   const [hasAnswered, setHasAnswered] = useState(false);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const question = await getFirstQuestion();
+        setQuestion(question);
+      } catch (error) {
+        console.error('Error fetching first question:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  
 
   async function startRecording() {
     try {
@@ -64,31 +77,36 @@ const PresentJournal = () => {
   }
 
   return (
+    <TouchableWithoutFeedback
+      onPress={() => {Keyboard.dismiss();}}>
     <View style={styles.main}>
       {/* Main Section */}
-      <View style={styles.box1}>
-        <View>
-          <Text>{question}</Text>
-        </View>
-      </View>
-      {hasAnswered ? (
-        <View style={styles.box2}>
-          <TextInput
-            style={styles.whitetext}
-            multiline={true}
-            numberOfLines={4}
-            onChangeText={(text) => {
-              setAnswer({ text });
-            }}
-          />
-        </View>
-      ) : (
-        <View style={styles.box2}>
-          <Text>{answerResponse}</Text>
-        </View>
-      )}
 
-      <Pressable
+
+      <ScrollView style={styles.box1}>
+        <View>
+          <Text style={styles.p1}>{question}</Text>
+        </View>
+      </ScrollView>
+
+      
+      <View style={styles.box2}>
+        <TextInput
+          style={styles.textInput}
+          multiline={true}
+          numberOfLines={4}
+          value={answer}
+          onChangeText={(text) => {
+            setAnswer(text);
+          }}
+        />     
+      </View>
+      {(hasAnswered && answerResponse) ?
+        <ScrollView style={styles.box1}>
+          <Text>{answerResponse}</Text>   
+        </ScrollView> : null}
+
+      {/* <Pressable
         style={styles.box3}
         onPress={() => {
           recording ? stopRecording() : startRecording();
@@ -121,44 +139,62 @@ const PresentJournal = () => {
             </Svg>
           )}
         </View>
-      </Pressable>
+      </Pressable> */}
       {hasAnswered ? (
-        <Pressable
-          style={styles.box4}
-          onPress={() => {
-            const followUp = getFollowUp();
-            nextQuestion = followUp.question;
-            setAnswerResponse(followUp.answerResponse);
-            setHasAnswered(true);
-          }}
-        >
-          <View>
-            <Text>Submit</Text>
-          </View>
-        </Pressable>
-      ) : (
-        <Pressable
-          style={styles.box4}
-          onPress={() => {
-            setPrevQuestions(prevQuestions.push(question));
-            setQuestion(nextQuestion);
-            nextQuestion = null;
-            setPrevAnswers(prevAnswers.push(answer));
-            setAnswer(null);
+        <GenBtn
+          text={"Next"}
+          bg={"#65D977"}
+          pressed={async () => {
+            // const followUp = getFollowUp();
+            // nextQuestion = followUp.question;
+            // setAnswerResponse(followUp.answerResponse);
+            var tempq = {role: "assistant",
+            content: question};
+            var response = await getNext(questionNumber,chatlog,false);
+            setQuestion(response);
+            setPrevQuestions([...prevQuestions,tempq])
+            setChatlog([...chatlog,tempq])
+            setAnswer("");
+            setAnswerResponse("")
+            if (questionNumber === 5) {
+              response = await summarize(chatlog);
+              console.log(response);
+              navigation.navigate("Summary",{response});
+            }
             setHasAnswered(false);
-            setQuestionNumber(questionNumber + 1);
           }}
         >
           <View>
             <Text>Next</Text>
           </View>
-        </Pressable>
+        </GenBtn>
+      ) : (
+        <GenBtn
+          text={"Next"}
+          bg={"#65D977"}
+          pressed={async () => {
+            var tempq = {role: "assistant",
+            content: question};
+            var tempa = {role: "user",
+            content: answer};
+            setPrevQuestions([...prevQuestions,tempq]);
+            setPrevAnswers([...prevAnswers,tempa]);
+            setHasAnswered(true);
+            var response = await getNext(questionNumber+1,[...chatlog,tempq,tempa],true); 
+            setChatlog([...chatlog,tempq,tempa]);
+            setAnswerResponse(response);
+            setQuestionNumber(questionNumber + 1);
+          }}
+        >
+          
+        </GenBtn>
       )}
 
       <View style={styles.row}>
         <View style={styles.rowtwo}></View>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -176,23 +212,38 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     padding: 15,
   },
+  p1: {
+
+    fontFamily: "Dolpino",
+    fontSize: 18,
+    color:"#000",
+  },
   box1: {
+    padding:"5%",
     width: "100%",
-    height: 75,
-    backgroundColor: "red", // Example color
+    backgroundColor: "#FEC27B", // Example color
     borderRadius: 20,
     marginBottom: 20,
   },
   box2: {
-    width: "90%",
+    width: "100%",
     height: 300,
-    backgroundColor: "gray", // Example color
-    borderRadius: 20,
+    backgroundColor: "#D9D9D9", 
+    padding:"5%",
+    borderRadius:20,
     marginBottom: 20,
+    position: "relative",
   },
-  whitetext: {
-    color: "white",
+  textInput: {
+    fontFamily: "Dolpino",
+    fontSize: 18,
+    color: "#000",
+    textAlignVertical: "top", // Align text to the top
+    textAlign: "left", // Align text to the right
+    height: "100%",
   },
+
+
   box3: {
     width: "90%",
     height: 100,
@@ -203,10 +254,16 @@ const styles = StyleSheet.create({
   box4: {
     width: "50%",
     height: 100,
-    backgroundColor: "yellow", // Example color
+    backgroundColor: "#FEC27B", // Example color
     borderRadius: 20,
   },
-
+  box5: {
+    width: "90%",
+    height: 75,
+    backgroundColor: "gray", // Example color
+    borderRadius: 20,
+    marginBottom: 20,
+  },
   row: {
     flex: 1,
     flexDirection: "row",
