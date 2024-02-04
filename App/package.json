@@ -25,6 +25,7 @@
     "jwt-decode": "^4.0.0",
     "react": "18.2.0",
     "react-native": "0.73.2",
+    "react-native-chart-kit": "^6.12.0",
     "react-native-css": "^2.1.2",
     "react-native-date-picker": "^4.3.5",
     "react-native-image-gallery": "^2.1.5",

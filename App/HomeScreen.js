@@ -57,15 +57,28 @@ const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading}>
-      <View style={styles.pfpc}>
-      <Image
-        style={styles.image}
-        resizeMode="contain"
-        source={require("./assets/IMG_3600.jpg")}
-      />
-    </View>
+      
+        <View style={styles.rowtwo}>
+        <Text style={styles.h1}>Howdy,{"\n"}Olivia!
+
+      
+       
         
-        <Text style={styles.h1}>Howdy,{"\n"}Olivia!</Text>
+        </Text>
+
+        <View style={[styles.frame,{alignSelf:"flex-end", paddingLeft: 506}]}>
+        <View style={styles.outer}>
+          <Image
+            style={styles.inner}
+            resizeMode="contain"
+            source={require("./assets/IMG_3600.jpg")}
+          />
+        </View>
+        </View>
+
+
+        </View>
+        
         <Text style={styles.h3}> Your Streak </Text>
         <DateTimeSelector></DateTimeSelector>
       </View>
@@ -323,6 +336,25 @@ const styles = StyleSheet.create({
   image: {
     width: '80%', // Adjust this width as needed
     height: '80%', // Adjust this height as needed
+  },
+  frame: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  outer: {
+    width: 100, // Adjust this according to your preference
+    height: 100, // Adjust this according to your preference
+    borderRadius: 100, // half of width and height to make it circular
+    overflow: 'hidden', // to make sure image stays within the circular frame
+    borderColor: 'white', // Add a border color if needed
+    borderWidth: 2, // Add border width if needed
+  },
+  inner: {
+    flex: 1,
+    width: null,
+    height: null,
   },
   
 });
