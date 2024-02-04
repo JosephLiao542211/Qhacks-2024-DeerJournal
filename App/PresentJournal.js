@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Pressable, TextInput,TouchableWithoutFeedback, 
 import Svg, { Path } from "react-native-svg";
 import * as Speech from "expo-speech";
 import { Audio } from "expo-av";
-import { getFirstQuestion, getFollowUp, getNext } from "./fetchBackend";
+import { getFirstQuestion, summarize, getNext } from "./fetchBackend";
 import GenBtn from "./Components/GenBtn";
 
 const PresentJournal = ({navigation}) => {
