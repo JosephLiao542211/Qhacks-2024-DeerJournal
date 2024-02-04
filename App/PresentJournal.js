@@ -4,8 +4,7 @@ import { StyleSheet, Text, View, Pressable, TextInput,TouchableWithoutFeedback, 
 import Svg, { Path } from "react-native-svg";
 import * as Speech from "expo-speech";
 import { Audio } from "expo-av";
-import { getFirstQuestion, getFollowUp, getNext } from "./fetchBackend";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { getFirstQuestion, getFollowUp, getNext, summarize } from "./fetchBackend";
 
 const PresentJournal = ({navigation}) => {
   // async function getQuestion(prevQuestions, prevAnswers) {
@@ -28,15 +27,10 @@ const PresentJournal = ({navigation}) => {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [hasAnswered, setHasAnswered] = useState(false);
   
-  var [state, setState] = useState({
-    inputValue: ''
-  });
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const question = await getFirstQuestion();
-        console.log(question);
         setQuestion(question);
       } catch (error) {
         console.error('Error fetching first question:', error);
@@ -158,9 +152,10 @@ const PresentJournal = ({navigation}) => {
             setAnswer("");
             setAnswerResponse("")
             if (questionNumber === 5) {
-              navigation.navigate("Home");
+              response = await summarize(chatlog);
+              console.log(response);
+              navigation.navigate("Summary",{response});
             }
-            setState({inputValue: ''});
             setHasAnswered(false);
           }}
         >

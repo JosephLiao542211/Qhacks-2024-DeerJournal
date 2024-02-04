@@ -8,6 +8,7 @@ import Envision from './Envision';
 import PastLogs from './PastLogs';
 import Activity from './Activity';
 import Parents from './Parents';
+import SummaryJournal from './SummaryJournal';
 import { useCallback, useEffect } from 'react';
 // import Login from './Components/Login';
 
@@ -42,6 +43,7 @@ const App = () => {
             options={{title: 'Welcome', headerShown: true}}
           />
           <Stack.Screen name="Journal" component={PresentJournal} />
+          <Stack.Screen name="Summary" component={SummaryJournal} />
           <Stack.Screen name="Envision" component={Envision} />
           <Stack.Screen name="Past Logs" component={PastLogs} />
           <Stack.Screen name="Activity" component={Activity} />
