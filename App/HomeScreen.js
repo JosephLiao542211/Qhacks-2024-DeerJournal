@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   },
   flag: {
     // position: 'relative', // Use relative positioning
-    top: 20,
+    top: 34,
   },
   clock: {
     // position: 'relative', // Use relative positioning

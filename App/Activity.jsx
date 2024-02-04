@@ -38,7 +38,6 @@ export default function Activity() {
         </Camera>
         <View style={styles.footer}>
             <Text>
-                JDNASNDJASDNANSDNLKMMKK
             </Text>
         </View>
         </View>

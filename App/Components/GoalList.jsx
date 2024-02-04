@@ -35,7 +35,7 @@ const Item = ({ title, onDelete }) => (
   </View>
 );
 
-const GoalList = () => {
+const GoalList = ({navigation}) => {
   const { goalImageUrlPairs, removeGoal, addGoal, editGoal } = useGoals();
 
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -92,7 +92,7 @@ const GoalList = () => {
         )}
       </ScrollView>
 
-      <GenBtn text={"Generate"} bg={"green"}></GenBtn>
+      <GenBtn text={"Generate"} bg={"green"} pressed={() => navigation.navigate("Vision Board")}></GenBtn>
     </SafeAreaView>
   );
 };

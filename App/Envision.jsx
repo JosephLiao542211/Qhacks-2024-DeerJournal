@@ -4,11 +4,11 @@ import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import GoalList from './Components/GoalList';
 import GenBtn from './Components/GenBtn';
 
-const Envision = () => {
+const Envision = ({navigation}) => {
   return (
     
       
-      <GoalList />
+      <GoalList navigation={navigation}/>
       
       
     
