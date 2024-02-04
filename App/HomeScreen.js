@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import DateTimeSelector from "./Components/DatetimeSelector";
 import GalleryVB from "./Components/Gallery";
+import Parents from "./Parents";
 const balh = {
   _bodyBlob: {
     _data: {
@@ -56,7 +57,26 @@ const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.dolpino}> Your Streak </Text>
+
+      <View style={styles.layout}>
+      <View style={styles.jasp1}>
+        <Text style={styles.h1}>Howdy,{"\n"}Olivia!</Text>
+      </View>
+      <View style={styles.jasp}>
+        <View style={[styles.frame, { alignSelf: "flex-end" }]}>
+          <View style={styles.outer}>
+            <Image
+              style={styles.inner}
+              resizeMode="contain"
+              source={require("./assets/IMG_3600.jpg")}
+            />
+          </View>
+        </View>
+      </View>
+    </View>
+      
+        
+        <Text style={styles.h3}> Your Streak: 178 days! </Text>
         <DateTimeSelector></DateTimeSelector>
       </View>
 
@@ -115,22 +135,59 @@ const HomeScreen = ({ navigation }) => {
               <Text style={styles.h2}> Past {"\n"} Logs </Text>
             </View>
           </Pressable>
+
+          
+
         </View>
+        <Pressable
+            style={styles.box5}
+            onPress={() => navigation.navigate("Parents")}
+          >
+            <View style={styles.imgcontainergoals}>
+              
+              <Text style={styles.h2a}> Parent Mode </Text>
+            </View>
+          </Pressable>
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+
+  h1: {
+    fontFamily: "Dolpino",
+    fontSize: 50,
+    padding:"2%",
+    color:"#000",
+  },
+
   h2: {
+    fontFamily: "Dolpino",
     fontSize: 34,
+    padding:"2%",
+    color:"#FFF",
+  },
+
+  h2a: {
+    fontFamily: "Dolpino",
+    fontSize: 34,
+    // padding:"2%",
+    color:"#FFF",
+  },
+
+  h3: {
+    fontFamily: "Dolpino",
+    fontSize: 18,
+    padding:"2%",
+    color:"#7097FA",
   },
   container: {
     flex: 1,
     padding: "5%",
   },
   dolpino: {
-    fontFamily: "Dolpino",
+    
   },
   heading: {
     margin: "5%",
@@ -245,6 +302,69 @@ const styles = StyleSheet.create({
     top: 5,
     transform: [{ scale: 1.3 }],
   },
+
+  box5: {
+    width: "100%",
+    height: 100,
+    backgroundColor: "#65D977", // Example color
+    borderRadius: 20,
+    marginBottom: 20,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.39,
+    shadowRadius: 8.3,
+
+    elevation: 7,
+  },
+  pfpc:{
+    flex:1,
+    width:100,
+    height:100,
+    borderRadius:100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor:"blue"
+
+  },
+  image: {
+    width: '80%', // Adjust this width as needed
+    height: '80%', // Adjust this height as needed
+  },
+  frame: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  outer: {
+    width: 100, // Adjust this according to your preference
+    height: 100, // Adjust this according to your preference
+    borderRadius: 100, // half of width and height to make it circular
+    overflow: 'hidden', // to make sure image stays within the circular frame
+    borderColor: 'white', // Add a border color if needed
+    borderWidth: 2, // Add border width if needed
+  },
+  inner: {
+    flex: 1,
+    width: null,
+    height: null,
+  },
+
+  layout: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+   
+  },
+  jasp: {
+    flex: 1,
+    marginLeft: '5%',
+    marginRight: '5%',
+  }
 });
 
 export default HomeScreen;
