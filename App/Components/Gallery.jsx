@@ -7,7 +7,6 @@ const ImageGallery = ({ imageUrls }) => {
 
   const scrollViewRef = useRef(null);
   const images = imageUrls ? [...imageUrls] : [];
-  console.log("imageUrls", images);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -34,6 +33,7 @@ const ImageGallery = ({ imageUrls }) => {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
+        scrollEventThrottle={16}
         ref={scrollViewRef}
         contentContainerStyle={styles.contentContainer}
         snapToInterval={Dimensions.get("window").width}

@@ -1,7 +1,7 @@
 //references:
 //https://auth0.com/blog/backend-for-frontend-pattern-with-auth0-and-dotnet/
 //https://developer.auth0.com/resources/code-samples/full-stack/hello-world/basic-access-control/spa/react-typescript/express-typescript
-
+const sound = require("sound-play");
 import { MongoClient } from "mongodb";
 import express from "express";
 import logger from "morgan";
@@ -9,10 +9,11 @@ import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
+import { tts } from "./speech";
+import { writeFile } from "fs";
 // import multer from "multer";
 
-import * as Chat from "./models"
-
+import * as Chat from "./models";
 
 const gpt_model = "gpt-3.5-turbo";
 import { Request, Response } from "express";
@@ -26,11 +27,11 @@ app.use(express.json());
 
 app.post("/api/imageGen", async (req: Request, res: Response) => {
   const prompt = req.body.prompt;
-  console.log(prompt)
+  console.log(prompt);
   const imageUrl = await generateImage(prompt);
-  console.log(imageUrl)
+  console.log(imageUrl);
   res.json({
-    imageUrl: imageUrl
+    imageUrl: imageUrl,
   });
   // res.json({
   //   imageUrl:
@@ -47,77 +48,87 @@ app.get("/api/test", (req: any, res: any) => {
 
 app.get("/api/chat/getQuestion", (req: any, res: any) => {
   res.json({
-    response: Chat.getFirst()
+    response: Chat.getFirst(),
   });
 });
 
 app.post("/api/chat/getMood", async (req: any, res: any) => {
   var resp = await Chat.getMood(req.body.history);
   res.json({
-    response: resp
+    response: resp,
   });
 });
 
 app.post("/api/chat/getResponse", async (req: any, res: any) => {
-  var resp = await Chat.getQR(gpt_model,req.body.history);
+  var resp = await Chat.getQR(gpt_model, req.body.history);
   res.json({
-    response: resp
+    response: resp,
   });
 });
 
 app.post("/api/chat/getQ2", async (req: any, res: any) => {
-  var resp = await Chat.secondQ(gpt_model,req.body.history);
+  var resp = await Chat.secondQ(gpt_model, req.body.history);
   res.json({
-    response: resp
+    response: resp,
   });
 });
 
 app.post("/api/chat/getQ3", async (req: any, res: any) => {
-  var resp = await Chat.thirdQ(gpt_model,req.body.history);
+  var resp = await Chat.thirdQ(gpt_model, req.body.history);
   res.json({
-    response: resp
+    response: resp,
   });
 });
 
 app.post("/api/chat/getGrateQ", async (req: any, res: any) => {
   var resp = Chat.getGratefulQ();
   res.json({
-    response: resp
+    response: resp,
   });
 });
 
 app.post("/api/chat/gradResponse", async (req: any, res: any) => {
-  var resp = await Chat.gratitudeQR(gpt_model,req.body.history);
+  var resp = await Chat.gratitudeQR(gpt_model, req.body.history);
   res.json({
-    response: resp
+    response: resp,
   });
 });
 
 app.post("/api/chat/getGoalQ", async (req: any, res: any) => {
   var resp = Chat.getGoalQ();
   res.json({
-    response: resp
+    response: resp,
   });
 });
 
 app.post("/api/chat/getGoodbye", async (req: any, res: any) => {
   var resp = Chat.getGoodbye();
   res.json({
-    response: resp
+    response: resp,
   });
 });
 
 app.post("/api/chat/summarize", async (req: any, res: any) => {
-  var resp = await Chat.summarize(gpt_model,req.body.history);
+  var resp = await Chat.summarize(gpt_model, req.body.history);
   res.json({
-    response: resp
+    response: resp,
   });
+});
+
+app.post("/api/tts", async (req: any, res: any) => {
+  const mp3Buffer = await tts(req.body.text);
+  writeFile("output.mp3", mp3Buffer, (err) => {
+    if (err) throw err;
+    console.log("The file has been saved!");
+  });
+  sound.play("output.mp3");
+  res.setHeader("Content-Type", "audio/mpeg");
+  res.send(mp3Buffer);
 });
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
 
 // // Set storage engine
 // const storage = multer.diskStorage({
@@ -141,9 +152,9 @@ app.listen(PORT, () => {
 //     return res.status(400).send('No file uploaded.');
 //   }
 
-  // Process the file here (e.g., save file info to database)
+// Process the file here (e.g., save file info to database)
 
-  // Respond to the client
+// Respond to the client
 //   res.send({
 //     message: 'File uploaded successfully.',
 //     fileInfo: {

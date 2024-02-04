@@ -7,7 +7,6 @@ const VisionBoard = () => {
   const { goalImageUrlPairs } = useGoals();
   const imageUrls = Object.values(goalImageUrlPairs);
   const images = imageUrls ? [...imageUrls] : [];
-  console.log("imageUrls", images);
 
 
 

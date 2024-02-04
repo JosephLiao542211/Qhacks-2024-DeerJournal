@@ -1,13 +1,23 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Pressable, TextInput,TouchableWithoutFeedback, Keyboard, ScrollView } from "react-native";
+import { Audio } from "expo-av";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
+} from "react-native";
 import Svg, { Path } from "react-native-svg";
 import * as Speech from "expo-speech";
-import { Audio } from "expo-av";
-import { getFirstQuestion, getFollowUp, getNext } from "./fetchBackend";
+import { getFirstQuestion, getFollowUp, getNext, getTts } from "./fetchBackend";
 import GenBtn from "./Components/GenBtn";
+import * as FileSystem from "expo-file-system";
 
-const PresentJournal = ({navigation}) => {
+const PresentJournal = ({ navigation }) => {
   // async function getQuestion(prevQuestions, prevAnswers) {
   //   if (prevQuestions.length == 0) {
   //     const firstQuestion = getFirstQuestion();
@@ -27,21 +37,32 @@ const PresentJournal = ({navigation}) => {
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [hasAnswered, setHasAnswered] = useState(false);
-  
+
+  const [sound, setSound] = useState();
+
+  async function playSound(base64data) {
+    console.log("Playing sound..");
+    const { sound } = await Audio.Sound.createAsync({
+      uri: `data:audio/mp3;base64,${base64data}`,
+    });
+
+    setSound(sound);
+
+    await sound.playAsync();
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const question = await getFirstQuestion();
         setQuestion(question);
       } catch (error) {
-        console.error('Error fetching first question:', error);
+        console.error("Error fetching first question:", error);
       }
     };
 
     fetchData();
   }, []);
-
-  
 
   async function startRecording() {
     try {
@@ -78,35 +99,37 @@ const PresentJournal = ({navigation}) => {
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => {Keyboard.dismiss();}}>
-    <View style={styles.main}>
-      {/* Main Section */}
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
+    >
+      <View style={styles.main}>
+        {/* Main Section */}
 
-
-      <ScrollView style={styles.box1}>
-        <View>
-          <Text style={styles.p1}>{question}</Text>
-        </View>
-      </ScrollView>
-
-      
-      <View style={styles.box2}>
-        <TextInput
-          style={styles.textInput}
-          multiline={true}
-          numberOfLines={4}
-          value={answer}
-          onChangeText={(text) => {
-            setAnswer(text);
-          }}
-        />     
-      </View>
-      {(hasAnswered && answerResponse) ?
         <ScrollView style={styles.box1}>
-          <Text>{answerResponse}</Text>   
-        </ScrollView> : null}
+          <View>
+            <Text style={styles.p1}>{question}</Text>
+          </View>
+        </ScrollView>
 
-      {/* <Pressable
+        <View style={styles.box2}>
+          <TextInput
+            style={styles.textInput}
+            multiline={true}
+            numberOfLines={4}
+            value={answer}
+            onChangeText={(text) => {
+              setAnswer(text);
+            }}
+          />
+        </View>
+        {hasAnswered && answerResponse ? (
+          <ScrollView style={styles.box1}>
+            <Text>{answerResponse}</Text>
+          </ScrollView>
+        ) : null}
+
+        {/* <Pressable
         style={styles.box3}
         onPress={() => {
           recording ? stopRecording() : startRecording();
@@ -140,60 +163,63 @@ const PresentJournal = ({navigation}) => {
           )}
         </View>
       </Pressable> */}
-      {hasAnswered ? (
-        <GenBtn
-          text={"Next"}
-          bg={"#65D977"}
-          pressed={async () => {
-            // const followUp = getFollowUp();
-            // nextQuestion = followUp.question;
-            // setAnswerResponse(followUp.answerResponse);
-            var tempq = {role: "assistant",
-            content: question};
-            var response = await getNext(questionNumber,chatlog,false);
-            setQuestion(response);
-            setPrevQuestions([...prevQuestions,tempq])
-            setChatlog([...chatlog,tempq])
-            setAnswer("");
-            setAnswerResponse("")
-            if (questionNumber === 5) {
-              response = await summarize(chatlog);
-              console.log(response);
-              navigation.navigate("Summary",{response});
-            }
-            setHasAnswered(false);
-          }}
-        >
-          <View>
-            <Text>Next</Text>
-          </View>
-        </GenBtn>
-      ) : (
-        <GenBtn
-          text={"Next"}
-          bg={"#65D977"}
-          pressed={async () => {
-            var tempq = {role: "assistant",
-            content: question};
-            var tempa = {role: "user",
-            content: answer};
-            setPrevQuestions([...prevQuestions,tempq]);
-            setPrevAnswers([...prevAnswers,tempa]);
-            setHasAnswered(true);
-            var response = await getNext(questionNumber+1,[...chatlog,tempq,tempa],true); 
-            setChatlog([...chatlog,tempq,tempa]);
-            setAnswerResponse(response);
-            setQuestionNumber(questionNumber + 1);
-          }}
-        >
-          
-        </GenBtn>
-      )}
+        {hasAnswered ? (
+          <GenBtn
+            text={"Next"}
+            bg={"#65D977"}
+            pressed={async () => {
+              // const followUp = getFollowUp();
+              // nextQuestion = followUp.question;
+              // setAnswerResponse(followUp.answerResponse);
+              var tempq = { role: "assistant", content: question };
+              var response = await getNext(questionNumber, chatlog, false);
+              setQuestion(response);
+              setPrevQuestions([...prevQuestions, tempq]);
+              setChatlog([...chatlog, tempq]);
+              setAnswer("");
+              setAnswerResponse("");
+              if (questionNumber === 5) {
+                response = await summarize(chatlog);
+                console.log(response);
+                navigation.navigate("Summary", { response });
+              }
+              setHasAnswered(false);
 
-      <View style={styles.row}>
-        <View style={styles.rowtwo}></View>
+              getTts(response).then((base64url) => {
+                playSound(base64url);
+              });
+            }}
+          >
+            <View>
+              <Text>Next</Text>
+            </View>
+          </GenBtn>
+        ) : (
+          <GenBtn
+            text={"Next"}
+            bg={"#65D977"}
+            pressed={async () => {
+              var tempq = { role: "assistant", content: question };
+              var tempa = { role: "user", content: answer };
+              setPrevQuestions([...prevQuestions, tempq]);
+              setPrevAnswers([...prevAnswers, tempa]);
+              setHasAnswered(true);
+              var response = await getNext(
+                questionNumber + 1,
+                [...chatlog, tempq, tempa],
+                true
+              );
+              setChatlog([...chatlog, tempq, tempa]);
+              setAnswerResponse(response);
+              setQuestionNumber(questionNumber + 1);
+            }}
+          ></GenBtn>
+        )}
+
+        <View style={styles.row}>
+          <View style={styles.rowtwo}></View>
+        </View>
       </View>
-    </View>
     </TouchableWithoutFeedback>
   );
 };
@@ -213,13 +239,12 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   p1: {
-
     fontFamily: "Dolpino",
     fontSize: 18,
-    color:"#000",
+    color: "#000",
   },
   box1: {
-    padding:"5%",
+    padding: "5%",
     width: "100%",
     backgroundColor: "#FEC27B", // Example color
     borderRadius: 20,
@@ -228,9 +253,9 @@ const styles = StyleSheet.create({
   box2: {
     width: "100%",
     height: 300,
-    backgroundColor: "#D9D9D9", 
-    padding:"5%",
-    borderRadius:20,
+    backgroundColor: "#D9D9D9",
+    padding: "5%",
+    borderRadius: 20,
     marginBottom: 20,
     position: "relative",
   },
@@ -242,7 +267,6 @@ const styles = StyleSheet.create({
     textAlign: "left", // Align text to the right
     height: "100%",
   },
-
 
   box3: {
     width: "90%",

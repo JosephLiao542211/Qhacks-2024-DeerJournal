@@ -1,9 +1,8 @@
 import OpenAI from "openai";
-require('dotenv').config({ path: './.env' });
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // This is the default and can be omitted
-});
+require('dotenv').config();
+
+const openai = new OpenAI();
 
 export default async function generateImage(prompt: string) {
   const response = await openai.images.generate({

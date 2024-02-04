@@ -15,7 +15,6 @@ import { useGoals } from "./goalsContext";
 
 const HomeScreen = ({ navigation }) => {
   const { goalImageUrlPairs } = useGoals();
-  console.log(goalImageUrlPairs);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading}>
