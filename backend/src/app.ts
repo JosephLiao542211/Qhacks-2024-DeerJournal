@@ -118,11 +118,13 @@ app.post("/api/chat/summarize", async (req: any, res: any) => {
 
 app.post("/api/tts", async (req: any, res: any) => {
   const mp3Buffer = await tts(req.body.text);
-  writeFile("./public/output.mp3", mp3Buffer, (err) => {
-    if (err) throw err;
-    console.log("The file has been saved!");
-  });
-  res.json({ message: "Success" });
+  if (mp3Buffer) {
+    writeFile("./public/output.mp3", mp3Buffer, (err) => {
+      if (err) throw err;
+      console.log("The file has been saved!");
+    });
+    res.json({ message: "Success" });
+  }
 });
 
 app.use(express.static("public"));
