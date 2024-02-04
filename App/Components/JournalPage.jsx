@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 const JournalPage = ({ text }) => {
   return (
     <View>
-        <View style={styles.container}>
-        <Text style={styles.p1}>{text}</Text>
-        </View>
+        <ScrollView style={styles.container} >
+          <Text style={styles.p1}>{text}</Text>
+        </ScrollView>
     </View>
     
   );
@@ -17,7 +17,8 @@ const styles = StyleSheet.create({
         
         padding: "5%",
         backgroundColor:"#FFCF96",
-        marginHorizontal:"5%",
+        
+        marginTop:"10%",
         height: "100%",
         borderRadius: 24,
         
@@ -25,6 +26,9 @@ const styles = StyleSheet.create({
     },
 
     p1:{
+      fontFamily: "Dolpino",
+      fontSize: 18,
+      color: "#000000",
 
     }
   
