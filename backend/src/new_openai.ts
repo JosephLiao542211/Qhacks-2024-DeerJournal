@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { moodAnalyzer, secondQ, thirdQ, thirdQR, gratitudeQR, goalDifferentiation, goalResponse, visionBoard } from './models.mjs';
+import { moodAnalyzer, secondQ, thirdQ, thirdQR, gratitudeQR, goalDifferentiation, goalResponse } from './models';
 
 const openai = new OpenAI();
 
@@ -19,7 +19,7 @@ rather than just focusing on the destination of my goals."
 const vision_board_r = "I want to get better at soccer, I want to learn more about fractions, and I want to make more friends."
 
 async function main() {
-  await thirdQ()
+  // await thirdQ()
 
 }
 

@@ -2,7 +2,14 @@ import OpenAI  from "openai";
 
 const openai = new OpenAI();
 
-async function moodAnalyzer(userR) {
+function getFirst() {
+    return [{
+        role: "assistant",
+        content: "How was your day today? Recount what happened."
+    }]
+}
+
+async function moodAnalyzer(userR: string) {
   const moodModel = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages: [
@@ -22,7 +29,7 @@ async function moodAnalyzer(userR) {
 
 
 
-async function secondQ(model, prev_conversation_history){
+async function secondQ(model: string, prev_conversation_history: any){
     var new_conversation_history = [...prev_conversation_history];
     new_conversation_history.push({"role": "system", "content":
     "You are a super enthusiastic and positive journalling assistant talking to a child. \
@@ -45,7 +52,7 @@ async function secondQ(model, prev_conversation_history){
     return assistant_reply;
 }
 
-async function thirdQ(model, prev_conversation_history){
+async function thirdQ(model: string, prev_conversation_history:any){
     var new_conversation_history = [...prev_conversation_history];
     new_conversation_history.push({"role": "system", "content":
     "You are still a super enthusiastic, positive, concise, and endearing journalling assistant talking to a child. \
@@ -61,7 +68,7 @@ async function thirdQ(model, prev_conversation_history){
     return assistant_reply;
 }
 
-async function thirdQR(model, prev_conversation_history){
+async function thirdQR(model: string, prev_conversation_history: any){
     var new_conversation_history = [...prev_conversation_history];
     new_conversation_history.push({"role": "system", "content":
     "You are still a super enthusiastic, positive, concise, and endearing journalling assistant talking to a child. \
@@ -76,7 +83,7 @@ async function thirdQR(model, prev_conversation_history){
     return assistant_reply;
 }
 
-async function gratitudeQR(model, prev_conversation_history){
+async function gratitudeQR(model: string, prev_conversation_history: any){
     var new_conversation_history = [...prev_conversation_history];
     new_conversation_history.push({"role": "system", "content":
     "You are still a super enthusiastic, positive, concise, and endearing journalling assistant talking to a child. \
@@ -93,10 +100,10 @@ async function gratitudeQR(model, prev_conversation_history){
     return assistant_reply;
 }
 
-async function goalDifferentiation(model, user_goals){
+async function goalDifferentiation(model:string, user_goals:string){
     var response = await openai.chat.completions.create({
         model: model,
-        messages: [({"role": "system", "content":
+        messages: [{"role": "system", "content":
         "You are now a professional who only reads user prompts that contain three goals that they want to accomplish\
         in the next month. You need to find these three goals and then \
         reiterate the user's three goals that they gave you in the following numbered list format: \
@@ -104,13 +111,13 @@ async function goalDifferentiation(model, user_goals){
         2. (Goal #2) \
         3. (Goal #3) \
         "},
-        {"role": "user", "content": user_goals})]
+        {"role": "user", "content": user_goals}]
     });
     var assistant_reply = response.choices[0].message.content;
     return assistant_reply;
 }
 
-async function goalResponse(model, prev_conversation_history){
+async function goalResponse(model: string, prev_conversation_history:any){
     var new_conversation_history = [...prev_conversation_history];
     new_conversation_history.push({"role": "system", "content":
     "You are still a super enthusiastic, positive, concise, and endearing journalling assistant talking to a child. \
@@ -126,15 +133,15 @@ async function goalResponse(model, prev_conversation_history){
     return assistant_reply;
 }
 
-    async function visionBoard(prompt){
-    var response = await openai.createImage({
-        model: "dall-e-3",
-        prompt: "visualize the following children's goal oriented towards a child and try to avoid using text in the image: " + prompt,
-        n: 1,
-        size: "1024x1024",
-    });
-    image_url = response.data.data[0].url;
-    return image_url;
-    }
+    // async function visionBoard(prompt:any){
+    // var response = await openai.createImage({
+    //     model: "dall-e-3",
+    //     prompt: "visualize the following children's goal oriented towards a child and try to avoid using text in the image: " + prompt,
+    //     n: 1,
+    //     size: "1024x1024",
+    // });
+    // var image_url = response.data.data[0].url;
+    // return image_url;
+    // }
 
-export { moodAnalyzer, secondQ, thirdQ, thirdQR, gratitudeQR, goalResponse, goalDifferentiation, visionBoard, run };
+export { getFirst, moodAnalyzer, secondQ, thirdQ, thirdQR, gratitudeQR, goalResponse, goalDifferentiation };
