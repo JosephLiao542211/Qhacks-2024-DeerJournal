@@ -13,6 +13,7 @@ import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
 
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
