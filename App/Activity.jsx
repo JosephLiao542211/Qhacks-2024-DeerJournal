@@ -2,6 +2,8 @@
 import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import GenBtn from './Components/GenBtn';
+import OpenLinkButton from './Link';
 
 export default function Activity() {
   const [type, setType] = useState(CameraType.back);
@@ -36,10 +38,12 @@ export default function Activity() {
             </TouchableOpacity>
             </View>
         </Camera>
+
         <View style={styles.footer}>
-            <Text>
-            </Text>
+          <OpenLinkButton url="https://en.wikipedia.org/wiki/Main_Page" buttonText="Open Wikipedia" />
+
         </View>
+          
         </View>
     
   );
