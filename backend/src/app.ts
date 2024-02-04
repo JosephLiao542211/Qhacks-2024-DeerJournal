@@ -14,9 +14,13 @@ import { notFoundHandler } from "./middleware/not-found.middleware";
 import * as Chat from "./models"
 
 
+const gpt_model = "gpt-3.5-turbo";
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
 
 app.get("/api/test", (req: any, res: any) => {
   res.json({
@@ -27,7 +31,63 @@ app.get("/api/test", (req: any, res: any) => {
 
 app.get("/api/chat/getQuestion", (req: any, res: any) => {
   res.json({
-    history: Chat.getFirst()
+    response: Chat.getFirst()
+  });
+});
+
+app.post("/api/chat/getMood", async (req: any, res: any) => {
+  var resp = await Chat.getMood(req.body.history);
+  res.json({
+    response: resp
+  });
+});
+
+app.post("/api/chat/getResponse", async (req: any, res: any) => {
+  var resp = await Chat.getQR(gpt_model,req.body.history);
+  res.json({
+    response: resp
+  });
+});
+
+app.post("/api/chat/getQ2", async (req: any, res: any) => {
+  var resp = await Chat.secondQ(gpt_model,req.body.history);
+  res.json({
+    response: resp
+  });
+});
+
+app.post("/api/chat/getQ3", async (req: any, res: any) => {
+  var resp = await Chat.thirdQ(gpt_model,req.body.history);
+  res.json({
+    response: resp
+  });
+});
+
+app.post("/api/chat/getGrateQ", async (req: any, res: any) => {
+  var resp = Chat.getGratefulQ();
+  res.json({
+    response: resp
+  });
+});
+
+app.post("/api/chat/gradResponse", async (req: any, res: any) => {
+  var resp = await Chat.gratitudeQR(gpt_model,req.body.history);
+  res.json({
+    response: resp
+  });
+});
+
+app.post("/api/chat/getGoalQ", async (req: any, res: any) => {
+  var resp = Chat.getGoalQ();
+  res.json({
+    response: resp
+  });
+});
+
+app.post("/api/chat/getGoodbye", async (req: any, res: any) => {
+  var resp = Chat.getGoodbye();
+  res.json({
+    response: resp
   });
 });
 

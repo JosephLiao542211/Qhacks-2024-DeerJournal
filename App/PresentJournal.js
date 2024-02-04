@@ -1,13 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Pressable, TextInput,TouchableWithoutFeedback, Keyboard } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import * as Speech from "expo-speech";
 import { Audio } from "expo-av";
-import { getFirstQuestion, getFollowUp } from "./fetchBackend";
+import { getFirstQuestion, getFollowUp, getNext } from "./fetchBackend";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
-const PresentJournal = () => {
+const PresentJournal = ({navigation}) => {
   // async function getQuestion(prevQuestions, prevAnswers) {
   //   if (prevQuestions.length == 0) {
   //     const firstQuestion = getFirstQuestion();
@@ -19,17 +19,34 @@ const PresentJournal = () => {
   // }
   const [prevQuestions, setPrevQuestions] = useState([]);
   const [prevAnswers, setPrevAnswers] = useState([]);
-  const [question, setQuestion] = useState(
-    getFirstQuestion(prevQuestions, prevAnswers)
-  );
-  const [answer, setAnswer] = useState(null);
+  const [chatlog, setChatlog] = useState([]);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [answerResponse, setAnswerResponse] = useState("");
   const [questionNumber, setQuestionNumber] = useState(0);
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
-  let nextQuestion = null;
   const [hasAnswered, setHasAnswered] = useState(false);
+  
+  var [state, setState] = useState({
+    inputValue: ''
+  });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const question = await getFirstQuestion();
+        console.log(question);
+        setQuestion(question);
+      } catch (error) {
+        console.error('Error fetching first question:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  
 
   async function startRecording() {
     try {
@@ -65,6 +82,8 @@ const PresentJournal = () => {
   }
 
   return (
+    <TouchableWithoutFeedback
+      onPress={() => {Keyboard.dismiss();}}>
     <View style={styles.main}>
       {/* Main Section */}
       <View style={styles.box1}>
@@ -77,15 +96,16 @@ const PresentJournal = () => {
             style={styles.whitetext}
             multiline={true}
             numberOfLines={4}
+            value={answer}
             onChangeText={(text) => {
-              setAnswer({ text });
+              setAnswer(text);
             }}
           />     
         </View>
 
-      {hasAnswered ?
+      {(hasAnswered && answerResponse) ?
         <View style={styles.box5}>
-          <Text>TEXT!</Text>   
+          <Text>{answerResponse}</Text>   
         </View> : null}
 
       {/* <Pressable
@@ -125,10 +145,22 @@ const PresentJournal = () => {
       {hasAnswered ? (
         <Pressable
           style={styles.box4}
-          onPress={() => {
+          onPress={async () => {
             // const followUp = getFollowUp();
             // nextQuestion = followUp.question;
             // setAnswerResponse(followUp.answerResponse);
+            var tempq = {role: "assistant",
+            content: question};
+            var response = await getNext(questionNumber,chatlog,false);
+            setQuestion(response);
+            setPrevQuestions([...prevQuestions,tempq])
+            setChatlog([...chatlog,tempq])
+            setAnswer("");
+            setAnswerResponse("")
+            if (questionNumber === 5) {
+              navigation.navigate("Home");
+            }
+            setState({inputValue: ''});
             setHasAnswered(false);
           }}
         >
@@ -139,13 +171,17 @@ const PresentJournal = () => {
       ) : (
         <Pressable
           style={styles.box4}
-          onPress={() => {
-            setPrevQuestions(prevQuestions+[question]);
-            setQuestion(nextQuestion);
-            nextQuestion = null;
-            setPrevAnswers(prevAnswers+[answer]);
-            setAnswer(null);
+          onPress={async () => {
+            var tempq = {role: "assistant",
+            content: question};
+            var tempa = {role: "user",
+            content: answer};
+            setPrevQuestions([...prevQuestions,tempq]);
+            setPrevAnswers([...prevAnswers,tempa]);
             setHasAnswered(true);
+            var response = await getNext(questionNumber+1,[...chatlog,tempq,tempa],true); 
+            setChatlog([...chatlog,tempq,tempa]);
+            setAnswerResponse(response);
             setQuestionNumber(questionNumber + 1);
           }}
         >
@@ -159,6 +195,7 @@ const PresentJournal = () => {
         <View style={styles.rowtwo}></View>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
