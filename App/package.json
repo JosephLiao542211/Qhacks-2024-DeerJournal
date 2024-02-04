@@ -30,12 +30,7 @@
     "react-native-image-gallery": "^2.1.5",
     "react-native-safe-area-context": "^4.9.0",
     "react-native-screens": "^3.29.0",
-<<<<<<< HEAD:App/package.json
     "react-native-svg": "14.1.0"
-=======
-    "react-native-svg": "14.1.0",
-    "zustand": "^4.5.0"
->>>>>>> 717d115cb797cf8522fe1ca7bdfe4fb6ceec23b5:app/package.json
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

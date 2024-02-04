@@ -32,19 +32,24 @@ export function getFirstQuestion() {
     });
 }
 
-export function getFollowUpQuestion(previousQuestions, previousAnswers) {
-    fetch("http://10.216.196.221:3000/api/getFollowUpQuestion", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+export function getFollowUp(previousQuestions, previousAnswers) {
+  const requestBody = {
+    previousQuestions: previousQuestions,
+    previousAnswers: previousAnswers,
+  };
+  fetch("http://10.216.196.221:3000/api/getFollowUp", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return data;
     })
-      .then((response) => response.json())
-      .then((data) => {
-        return data.question;
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        return null;
-      });
-  }
+    .catch((error) => {
+      console.error("Error:", error);
+      return null;
+    });
+}
