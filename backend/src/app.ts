@@ -90,6 +90,13 @@ app.post("/api/chat/getGoodbye", async (req: any, res: any) => {
   });
 });
 
+app.post("/api/chat/summarize", async (req: any, res: any) => {
+  var resp = Chat.summarize(gpt_model,req.body.history);
+  res.json({
+    response: resp
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });

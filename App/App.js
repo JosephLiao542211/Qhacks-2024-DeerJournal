@@ -8,6 +8,8 @@ import Envision from './Envision';
 import PastLogs from './PastLogs';
 import Activity from './Activity';
 import Parents from './Parents';
+import SummaryJournal from './SummaryJournal';
+import { JournalsProvider } from './JournalContext';
 import { useCallback, useEffect } from 'react';
 // import Login from './Components/Login';
 
@@ -34,6 +36,7 @@ const App = () => {
   }
   return (
     <View style={appstyle.container} onLayout={onLayoutRootView}>
+      <JournalsProvider>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -42,12 +45,14 @@ const App = () => {
             options={{title: 'Welcome', headerShown: true}}
           />
           <Stack.Screen name="Journal" component={PresentJournal} />
+          <Stack.Screen name="Summary" component={SummaryJournal} />
           <Stack.Screen name="Envision" component={Envision} />
           <Stack.Screen name="Past Logs" component={PastLogs} />
           <Stack.Screen name="Activity" component={Activity} />
           <Stack.Screen name="Parents" component={Parents} />
         </Stack.Navigator>
       </NavigationContainer>
+      </JournalsProvider>
     </View>
   );
 };

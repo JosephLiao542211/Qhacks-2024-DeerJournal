@@ -173,6 +173,22 @@ async function goalResponse(model: string, prev_conversation_history:any){
     return assistant_reply;
 }
 
+async function summarize(model: string, prev_conversation_history:any){
+    var new_conversation_history = [...prev_conversation_history];
+    new_conversation_history.push({"role": "system", "content":
+    "Given all previous messages in the conversation history, including the ones from you, \
+    'role : assistan't, and the user, 'role: user', summarize the entire chat history \
+    in 5 sentences or less, with an emphasis on the mood, feelings, and events the user has \
+    described.\
+    "});
+    var response = await openai.chat.completions.create({
+        model: model,
+        messages: new_conversation_history
+    });
+    var assistant_reply = response.choices[0].message;
+    return assistant_reply;
+}
+
     // async function visionBoard(prompt:any){
     // var response = await openai.createImage({
     //     model: "dall-e-3",
@@ -184,4 +200,4 @@ async function goalResponse(model: string, prev_conversation_history:any){
     // return image_url;
     // }
 
-export { getFirst, getGratefulQ, getGoalQ, getGoodbye, getMood, moodAnalyzer, secondQ, thirdQ, getQR, gratitudeQR, goalResponse, goalDifferentiation };
+export { getFirst, getGratefulQ, getGoalQ, getGoodbye, getMood, moodAnalyzer, secondQ, thirdQ, getQR, gratitudeQR, goalResponse, goalDifferentiation, summarize};

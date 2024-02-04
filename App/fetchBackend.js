@@ -105,22 +105,6 @@ export async function getNext(questionNumber, chatlog, response) {
       return null;
     }
   }
-  // var requestBody = {history: chatlog};
-  // try {
-  //   const response = await fetch("http://" + backend_ip + "/api/chat/getQuestion", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(requestBody)
-  //   });
-
-  //   const data = await response.json();
-  //   return data.history[data.history.length - 1].content;
-  // } catch (error) {
-  //   console.error("Error:", error);
-  //   return null;
-  // }
 }
 
 export async function getResponse(questionNumber, chatlog) {
@@ -191,33 +175,20 @@ export async function getResponse(questionNumber, chatlog) {
   }
 }
 
-export function getFollowUp(previousQuestions, previousAnswers) {
-  const requestBody = {
-    previousQuestions: previousQuestions,
-    previousAnswers: previousAnswers,
-  };
-  fetch("http://"+backend_ip+"/api/getFollowUp", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestBody),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      return data;
-    })
-  }
-
-export function getFollowUpQuestion(previousQuestions, previousAnswers) {
-    fetch("http://"+backend_ip+"/api/getFollowUpQuestion", {
-      method: "GET",
+export async function summarize(chatlog) {
+  var requestBody = {history: chatlog};
+  try {
+    const response = await fetch("http://" + backend_ip + "/api/chat/summarize", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      return null;
+      body: JSON.stringify(requestBody),
     });
+    const data = await response.json();
+    return data.response.content;
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
 }
