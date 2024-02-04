@@ -11,6 +11,7 @@ import {
   StatusBar,
   TextInput,
   Button,
+  Pressable
 } from "react-native";
 
 const Item = ({ title, onDelete }) => (
