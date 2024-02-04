@@ -5,8 +5,6 @@ import Svg, { Path } from "react-native-svg";
 import * as Speech from "expo-speech";
 import { Audio } from "expo-av";
 import { getFirstQuestion, getFollowUp, getNext, summarize } from "./fetchBackend";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
-import { useJournals } from "./JournalContext";
 
 const PresentJournal = ({navigation}) => {
   // async function getQuestion(prevQuestions, prevAnswers) {
@@ -28,12 +26,7 @@ const PresentJournal = ({navigation}) => {
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [hasAnswered, setHasAnswered] = useState(false);
-  const {journalText, removeJournal, addJournal} = useJournals();
   
-  var [state, setState] = useState({
-    inputValue: ''
-  });
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -158,12 +151,11 @@ const PresentJournal = ({navigation}) => {
             setChatlog([...chatlog,tempq])
             setAnswer("");
             setAnswerResponse("")
-            if (questionNumber === 1) { //5
+            if (questionNumber === 5) {
               response = await summarize(chatlog);
-              addJournal(response);
-              navigation.navigate("Summary");
+              console.log(response);
+              navigation.navigate("Summary",{response});
             }
-            setState({inputValue: ''});
             setHasAnswered(false);
           }}
         >

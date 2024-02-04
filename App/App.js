@@ -9,7 +9,6 @@ import PastLogs from './PastLogs';
 import Activity from './Activity';
 import Parents from './Parents';
 import SummaryJournal from './SummaryJournal';
-import { JournalsProvider } from './JournalContext';
 import { useCallback, useEffect } from 'react';
 // import Login from './Components/Login';
 
@@ -36,7 +35,6 @@ const App = () => {
   }
   return (
     <View style={appstyle.container} onLayout={onLayoutRootView}>
-      <JournalsProvider>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -52,7 +50,6 @@ const App = () => {
           <Stack.Screen name="Parents" component={Parents} />
         </Stack.Navigator>
       </NavigationContainer>
-      </JournalsProvider>
     </View>
   );
 };

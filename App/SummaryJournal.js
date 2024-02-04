@@ -2,30 +2,14 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import JournalPage from './Components/JournalPage';
-import { useJournals } from './JournalContext';
+import { useRoute } from '@react-navigation/native';
 
 const SummaryJournal = () => {
-  const {journalText, removeJournal, addJournal} = useJournals();
-  const [text, setText] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const temp = await removeJournal();
-        setText(temp);
-        console.log(temp);
-      } catch (error) {
-        console.error('Error fetching summary:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+  const route = useRoute();
   return (
     
       
-      <JournalPage text = {text} />
+      <JournalPage text = {route.params?.response} />
       
       
     
