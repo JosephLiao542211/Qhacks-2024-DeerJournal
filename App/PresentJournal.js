@@ -40,11 +40,17 @@ const PresentJournal = ({ navigation }) => {
 
   const [sound, setSound] = useState();
 
-  async function playSound(base64data) {
+  async function playSound() {
     console.log("Playing sound..");
-    const { sound } = await Audio.Sound.createAsync({
-      uri: `data:audio/mp3;base64,${base64data}`,
-    });
+
+    const { sound } = await Audio.Sound.createAsync(
+      {
+        uri: process.env.EXPO_PUBLIC_BACKEND_URL + "output.mp3",
+      },
+      { shouldPlay: true }
+    );
+
+    console.log("Plsfdf.");
 
     setSound(sound);
 
@@ -56,6 +62,9 @@ const PresentJournal = ({ navigation }) => {
       try {
         const question = await getFirstQuestion();
         setQuestion(question);
+        getTts(question).then(() => {
+          playSound();
+        });
       } catch (error) {
         console.error("Error fetching first question:", error);
       }
@@ -185,8 +194,8 @@ const PresentJournal = ({ navigation }) => {
               }
               setHasAnswered(false);
 
-              getTts(response).then((base64url) => {
-                playSound(base64url);
+              getTts(response).then(() => {
+                playSound();
               });
             }}
           >
@@ -212,6 +221,9 @@ const PresentJournal = ({ navigation }) => {
               setChatlog([...chatlog, tempq, tempa]);
               setAnswerResponse(response);
               setQuestionNumber(questionNumber + 1);
+              getTts(response).then(() => {
+                playSound();
+              });
             }}
           ></GenBtn>
         )}

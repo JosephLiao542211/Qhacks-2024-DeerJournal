@@ -11,6 +11,7 @@ import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
 import { tts } from "./speech";
 import { writeFile } from "fs";
+import fileUrl from "file-url";
 // import multer from "multer";
 
 import * as Chat from "./models";
@@ -117,14 +118,14 @@ app.post("/api/chat/summarize", async (req: any, res: any) => {
 
 app.post("/api/tts", async (req: any, res: any) => {
   const mp3Buffer = await tts(req.body.text);
-  writeFile("output.mp3", mp3Buffer, (err) => {
+  writeFile("./public/output.mp3", mp3Buffer, (err) => {
     if (err) throw err;
     console.log("The file has been saved!");
   });
-  sound.play("output.mp3");
-  res.setHeader("Content-Type", "audio/mpeg");
-  res.send(mp3Buffer);
+  res.json({ message: "Success" });
 });
+
+app.use(express.static("public"));
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

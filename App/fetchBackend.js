@@ -232,18 +232,7 @@ export async function getTts(text) {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    let reader = new FileReader();
-    reader.readAsDataURL(blob);
-    let base64data = null;
-    reader.onloadend = function () {
-      base64data = reader.result;
-      // console.log(base64data);
-    };
     
-    return base64data;
   } catch (error) {
     console.error("Error:", error);
     return null;
