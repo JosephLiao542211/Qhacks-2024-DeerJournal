@@ -1,12 +1,57 @@
 import OpenAI  from "openai";
 
+require('dotenv').config()
+
 const openai = new OpenAI();
 
+const first_sys_r_positive = "That's great to hear!"
+const first_sys_r_negative = "Oh no! I'm sorry to hear that!"
+const gratitude_q = "What are three things you are grateful for today?"
+const vision_month_q = "What are 3 things you want to accomplish in a month?"
+const goodbye = "Great thank you! See you tomorrow!"
+
 function getFirst() {
-    return [{
+    return {
         role: "assistant",
         content: "How was your day today? Recount what happened."
-    }]
+    }
+}
+
+function getGratefulQ() {
+    return {
+        role: "assistant",
+        content: gratitude_q
+    }
+} 
+
+function getGoalQ() {
+    return {
+        role: "assistant",
+        content: vision_month_q
+    }
+} 
+
+function getGoodbye() {
+    return {
+        role: "assistant",
+        content: goodbye
+    }
+} 
+
+async function getMood(prev_conversation_history: any) {
+    var req = prev_conversation_history[prev_conversation_history.length-1].content
+    var res = "";
+    const mood = await moodAnalyzer(req);
+
+    if (mood == 'happy') {
+        res = first_sys_r_positive
+    } else {
+        res = first_sys_r_negative
+    }
+    return {
+        role: "assistant",
+        content: res
+    }
 }
 
 async function moodAnalyzer(userR: string) {
@@ -27,8 +72,6 @@ async function moodAnalyzer(userR: string) {
   return moodModel.choices[0].message.content;
 }
 
-
-
 async function secondQ(model: string, prev_conversation_history: any){
     var new_conversation_history = [...prev_conversation_history];
     new_conversation_history.push({"role": "system", "content":
@@ -48,7 +91,7 @@ async function secondQ(model: string, prev_conversation_history: any){
         model: model,
         messages: new_conversation_history
     });
-    var assistant_reply = response.choices[0].message.content;
+    var assistant_reply = response.choices[0].message;
     return assistant_reply;
 }
 
@@ -64,11 +107,11 @@ async function thirdQ(model: string, prev_conversation_history:any){
         model: model,
         messages: new_conversation_history
     });
-    var assistant_reply = response.choices[0].message.content;
+    var assistant_reply = response.choices[0].message;
     return assistant_reply;
 }
 
-async function thirdQR(model: string, prev_conversation_history: any){
+async function getQR(model: string, prev_conversation_history: any){
     var new_conversation_history = [...prev_conversation_history];
     new_conversation_history.push({"role": "system", "content":
     "You are still a super enthusiastic, positive, concise, and endearing journalling assistant talking to a child. \
@@ -79,7 +122,7 @@ async function thirdQR(model: string, prev_conversation_history: any){
         model: model,
         messages: new_conversation_history
     });
-    var assistant_reply = response.choices[0].message.content;
+    var assistant_reply = response.choices[0].message;
     return assistant_reply;
 }
 
@@ -96,7 +139,7 @@ async function gratitudeQR(model: string, prev_conversation_history: any){
         model: model,
         messages: new_conversation_history
     });
-    var assistant_reply = response.choices[0].message.content;
+    var assistant_reply = response.choices[0].message;
     return assistant_reply;
 }
 
@@ -106,10 +149,7 @@ async function goalDifferentiation(model:string, user_goals:string){
         messages: [{"role": "system", "content":
         "You are now a professional who only reads user prompts that contain three goals that they want to accomplish\
         in the next month. You need to find these three goals and then \
-        reiterate the user's three goals that they gave you in the following numbered list format: \
-        1. (Goal #1) \
-        2. (Goal #2) \
-        3. (Goal #3) \
+        reiterate the user's three goals that they gave you into a javascript array or strings \
         "},
         {"role": "user", "content": user_goals}]
     });
@@ -144,4 +184,4 @@ async function goalResponse(model: string, prev_conversation_history:any){
     // return image_url;
     // }
 
-export { getFirst, moodAnalyzer, secondQ, thirdQ, thirdQR, gratitudeQR, goalResponse, goalDifferentiation };
+export { getFirst, getGratefulQ, getGoalQ, getGoodbye, getMood, moodAnalyzer, secondQ, thirdQ, getQR, gratitudeQR, goalResponse, goalDifferentiation };
