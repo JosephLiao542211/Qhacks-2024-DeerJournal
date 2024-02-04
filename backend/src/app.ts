@@ -12,10 +12,19 @@ import cors from "cors";
 import { messagesRouter } from "./messages/messages.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
+import { Request, Response } from "express";
+import generateImage from "./imageGen";
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+
+app.get("/api/imageGen", (req: Request, res: Response) => {
+  const message = req.body.message;
+  res.json({
+    imageUrl: generateImage(message),
+  });
+});
 
 app.get("/api/test", (req: any, res: any) => {
   res.json({
