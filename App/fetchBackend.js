@@ -1,4 +1,4 @@
-const backend_ip = "10.216.51.147:3000"
+const backend_ip = "100.99.245.43:3000";
 
 export function testBackend() {
   fetch("http://"+backend_ip+"/api/test", {
@@ -17,21 +17,178 @@ export function testBackend() {
     });
 }
 
-export function getFirstQuestion() {
-  fetch("http://"+backend_ip+":3000/api/chat/getQuestion", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      return data.history;
-    })
-    .catch((error) => {
+export async function getFirstQuestion() {
+  try {
+    const response = await fetch("http://" + backend_ip + "/api/chat/getQuestion", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    return data.response.content;
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
+}
+
+export async function getNext(questionNumber, chatlog, response) {
+  if (response == true) {
+    return await getResponse(questionNumber, chatlog);
+  }
+  if (questionNumber === 1) {
+    var requestBody = {history: chatlog};
+    try {
+      const response = await fetch("http://" + backend_ip + "/api/chat/getQ2", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      return data.response.content;
+    } catch (error) {
       console.error("Error:", error);
       return null;
-    });
+    }
+  }
+  if (questionNumber === 2) {
+    var requestBody = {history: chatlog};
+    try {
+      const response = await fetch("http://" + backend_ip + "/api/chat/getQ3", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      return data.response.content;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
+  if (questionNumber === 3) {
+    var requestBody = {history: chatlog};
+    try {
+      const response = await fetch("http://" + backend_ip + "/api/chat/getGrateQ", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      return data.response.content;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
+  if (questionNumber === 4) {
+    var requestBody = {history: chatlog};
+    try {
+      const response = await fetch("http://" + backend_ip + "/api/chat/getGoalQ", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      return data.response.content;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
+  // var requestBody = {history: chatlog};
+  // try {
+  //   const response = await fetch("http://" + backend_ip + "/api/chat/getQuestion", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(requestBody)
+  //   });
+
+  //   const data = await response.json();
+  //   return data.history[data.history.length - 1].content;
+  // } catch (error) {
+  //   console.error("Error:", error);
+  //   return null;
+  // }
+}
+
+export async function getResponse(questionNumber, chatlog) {
+  var requestBody = {history: chatlog};
+  if (questionNumber === 1) {
+    try {
+      const response = await fetch("http://" + backend_ip + "/api/chat/getMood", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      return data.response.content;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
+  else if (questionNumber == 5) {
+    try {
+      const response = await fetch("http://" + backend_ip + "/api/chat/getGoodbye", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      return data.response.content;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
+  else if (questionNumber > 3) {
+    try {
+      const response = await fetch("http://" + backend_ip + "/api/chat/gradResponse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      return data.response.content;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
+  else if (questionNumber > 1){
+    try {
+      const response = await fetch("http://" + backend_ip + "/api/chat/getResponse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      return data.response.content;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
 }
 
 export function getFollowUp(previousQuestions, previousAnswers) {
@@ -39,7 +196,7 @@ export function getFollowUp(previousQuestions, previousAnswers) {
     previousQuestions: previousQuestions,
     previousAnswers: previousAnswers,
   };
-  fetch("http://"+backend_ip+":3000/api/getFollowUp", {
+  fetch("http://"+backend_ip+"/api/getFollowUp", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -53,7 +210,7 @@ export function getFollowUp(previousQuestions, previousAnswers) {
   }
 
 export function getFollowUpQuestion(previousQuestions, previousAnswers) {
-    fetch("http://"+backend_ip+":3000/api/getFollowUpQuestion", {
+    fetch("http://"+backend_ip+"/api/getFollowUpQuestion", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

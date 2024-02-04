@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { moodAnalyzer, secondQ, thirdQ, thirdQR, gratitudeQR, goalDifferentiation, goalResponse } from './models';
+import { moodAnalyzer, secondQ, thirdQ, getQR, gratitudeQR, goalDifferentiation, goalResponse } from './models';
 
 const openai = new OpenAI();
 
