@@ -1,10 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Pressable, TextInput,TouchableWithoutFeedback, Keyboard } from "react-native";
+import { StyleSheet, Text, View, Pressable, TextInput,TouchableWithoutFeedback, Keyboard, ScrollView } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import * as Speech from "expo-speech";
 import { Audio } from "expo-av";
-import { getFirstQuestion, getFollowUp, getNext, summarize } from "./fetchBackend";
+import { getFirstQuestion, getFollowUp, getNext } from "./fetchBackend";
+import GenBtn from "./Components/GenBtn";
 
 const PresentJournal = ({navigation}) => {
   // async function getQuestion(prevQuestions, prevAnswers) {
@@ -80,27 +81,30 @@ const PresentJournal = ({navigation}) => {
       onPress={() => {Keyboard.dismiss();}}>
     <View style={styles.main}>
       {/* Main Section */}
-      <View style={styles.box1}>
-        <View>
-          <Text>{question}</Text>
-        </View>
-      </View>
-        <View style={styles.box2}>
-          <TextInput
-            style={styles.whitetext}
-            multiline={true}
-            numberOfLines={4}
-            value={answer}
-            onChangeText={(text) => {
-              setAnswer(text);
-            }}
-          />     
-        </View>
 
+
+      <ScrollView style={styles.box1}>
+        <View>
+          <Text style={styles.p1}>{question}</Text>
+        </View>
+      </ScrollView>
+
+      
+      <View style={styles.box2}>
+        <TextInput
+          style={styles.textInput}
+          multiline={true}
+          numberOfLines={4}
+          value={answer}
+          onChangeText={(text) => {
+            setAnswer(text);
+          }}
+        />     
+      </View>
       {(hasAnswered && answerResponse) ?
-        <View style={styles.box5}>
+        <ScrollView style={styles.box1}>
           <Text>{answerResponse}</Text>   
-        </View> : null}
+        </ScrollView> : null}
 
       {/* <Pressable
         style={styles.box3}
@@ -137,9 +141,10 @@ const PresentJournal = ({navigation}) => {
         </View>
       </Pressable> */}
       {hasAnswered ? (
-        <Pressable
-          style={styles.box4}
-          onPress={async () => {
+        <GenBtn
+          text={"Next"}
+          bg={"#65D977"}
+          pressed={async () => {
             // const followUp = getFollowUp();
             // nextQuestion = followUp.question;
             // setAnswerResponse(followUp.answerResponse);
@@ -162,11 +167,12 @@ const PresentJournal = ({navigation}) => {
           <View>
             <Text>Next</Text>
           </View>
-        </Pressable>
+        </GenBtn>
       ) : (
-        <Pressable
-          style={styles.box4}
-          onPress={async () => {
+        <GenBtn
+          text={"Next"}
+          bg={"#65D977"}
+          pressed={async () => {
             var tempq = {role: "assistant",
             content: question};
             var tempa = {role: "user",
@@ -180,10 +186,8 @@ const PresentJournal = ({navigation}) => {
             setQuestionNumber(questionNumber + 1);
           }}
         >
-          <View>
-            <Text>Next</Text>
-          </View>
-        </Pressable>
+          
+        </GenBtn>
       )}
 
       <View style={styles.row}>
@@ -208,23 +212,38 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     padding: 15,
   },
+  p1: {
+
+    fontFamily: "Dolpino",
+    fontSize: 18,
+    color:"#000",
+  },
   box1: {
+    padding:"5%",
     width: "100%",
-    height: 75,
-    backgroundColor: "red", // Example color
+    backgroundColor: "#FEC27B", // Example color
     borderRadius: 20,
     marginBottom: 20,
   },
   box2: {
-    width: "90%",
+    width: "100%",
     height: 300,
-    backgroundColor: "gray", // Example color
-    borderRadius: 20,
+    backgroundColor: "#D9D9D9", 
+    padding:"5%",
+    borderRadius:20,
     marginBottom: 20,
+    position: "relative",
   },
-  whitetext: {
-    color: "white",
+  textInput: {
+    fontFamily: "Dolpino",
+    fontSize: 18,
+    color: "#000",
+    textAlignVertical: "top", // Align text to the top
+    textAlign: "left", // Align text to the right
+    height: "100%",
   },
+
+
   box3: {
     width: "90%",
     height: 100,
@@ -235,7 +254,7 @@ const styles = StyleSheet.create({
   box4: {
     width: "50%",
     height: 100,
-    backgroundColor: "yellow", // Example color
+    backgroundColor: "#FEC27B", // Example color
     borderRadius: 20,
   },
   box5: {

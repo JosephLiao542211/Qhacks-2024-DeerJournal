@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    
   },
   outer: {
     width: 100, // Adjust this according to your preference
