@@ -57,29 +57,26 @@ const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading}>
+
+      <View style={styles.layout}>
+      <View style={styles.jasp1}>
+        <Text style={styles.h1}>Howdy,{"\n"}Olivia!</Text>
+      </View>
+      <View style={styles.jasp}>
+        <View style={[styles.frame, { alignSelf: "flex-end" }]}>
+          <View style={styles.outer}>
+            <Image
+              style={styles.inner}
+              resizeMode="contain"
+              source={require("./assets/IMG_3600.jpg")}
+            />
+          </View>
+        </View>
+      </View>
+    </View>
       
-        <View style={styles.rowtwo}>
-        <Text style={styles.h1}>Howdy,{"\n"}Olivia!
-
-      
-       
         
-        </Text>
-
-        <View style={[styles.frame,{alignSelf:"flex-end", paddingLeft: 506}]}>
-        <View style={styles.outer}>
-          <Image
-            style={styles.inner}
-            resizeMode="contain"
-            source={require("./assets/IMG_3600.jpg")}
-          />
-        </View>
-        </View>
-
-
-        </View>
-        
-        <Text style={styles.h3}> Your Streak </Text>
+        <Text style={styles.h3}> Your Streak: 178 days! </Text>
         <DateTimeSelector></DateTimeSelector>
       </View>
 
@@ -356,7 +353,18 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
   },
-  
+
+  layout: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+   
+  },
+  jasp: {
+    flex: 1,
+    marginLeft: '5%',
+    marginRight: '5%',
+  }
 });
 
 export default HomeScreen;
