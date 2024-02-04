@@ -57,6 +57,14 @@ const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.heading}>
+      <View style={styles.pfpc}>
+      <Image
+        style={styles.image}
+        resizeMode="contain"
+        source={require("./assets/IMG_3600.jpg")}
+      />
+    </View>
+        
         <Text style={styles.h1}>Howdy,{"\n"}Olivia!</Text>
         <Text style={styles.h3}> Your Streak </Text>
         <DateTimeSelector></DateTimeSelector>
@@ -141,7 +149,7 @@ const styles = StyleSheet.create({
     fontFamily: "Dolpino",
     fontSize: 50,
     padding:"2%",
-    color:"#",
+    color:"#000",
   },
 
   h2: {
@@ -302,6 +310,21 @@ const styles = StyleSheet.create({
 
     elevation: 7,
   },
+  pfpc:{
+    flex:1,
+    width:100,
+    height:100,
+    borderRadius:100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor:"blue"
+
+  },
+  image: {
+    width: '80%', // Adjust this width as needed
+    height: '80%', // Adjust this height as needed
+  },
+  
 });
 
 export default HomeScreen;

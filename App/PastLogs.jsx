@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import JournalPage from './Components/JournalPage';
 import DateTimeSelector from './Components/DatetimeSelector';
+import DateSelector from './Components/Date';
+import TranscriptionComponent from './Components/Transcription';
 
 const PastLogs = ({datetime}) => {
   return (
@@ -9,11 +11,11 @@ const PastLogs = ({datetime}) => {
       <View style={styles.heading}>
 
       <Text style={styles.h3}>
-        Set a date:
+        Choose a date:
       </Text>
 
-         <DateTimeSelector></DateTimeSelector>
-        
+         <DateSelector></DateSelector>
+         
 
       </View>
       
@@ -33,7 +35,8 @@ const styles = StyleSheet.create({
       h3: {
         fontFamily: "Dolpino",
         fontSize: 18,
-        color:"#000",
+        color:"#000000",
+        
       },
   
 });

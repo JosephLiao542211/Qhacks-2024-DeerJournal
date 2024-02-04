@@ -11,34 +11,42 @@ import {
   StatusBar,
   TextInput,
   Button,
+  Pressable,
 } from 'react-native';
 
 const initialData = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
+    title: 'Start Typing....',
   },
   {
     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
+    title: 'Start Typing....',
   },
   {
     id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
+    title: 'Start Typing....',
   },
 ];
 
 const Item = ({ title, onDelete }) => (
   <View style={styles.item}>
     <TextInput 
-      style={styles.title} 
+      style={styles.p1} 
       multiline={true} 
       blurOnSubmit={true}
     // Set a max height for the text input
     >
       {title}
     </TextInput>
-    <GenBtn text={"x"} bg={"0"} pressed={onDelete}></GenBtn>
+    <Pressable  onPress={onDelete}>
+      <View style={{height:20, width:20}}>
+        <Text> x </Text>
+
+      </View>
+      
+    </Pressable>
+    
   </View>
 );
 
@@ -48,7 +56,7 @@ const GoalList = () => {
   const addItem = () => {
     const newItem = {
       id: Math.random().toString(),
-      title: `New Item ${data.length + 1}`,
+      title: `Start Typing....`,
     };
     setData([...data, newItem]);
   };
@@ -60,16 +68,16 @@ const GoalList = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.h2}>Monthly Goals</Text>
+      <Text style={styles.h1}>Monthly Goals</Text>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {data.map((item) => (
           <Item key={item.id} title={item.title} onDelete={() => deleteItem(item.id)} />
         ))}
         {/* <Button title="Add Item" onPress={addItem}/> */}
-        <GenBtn text={"Add Item"} bg={"#D9D9D9"} pressed={addItem} ></GenBtn>
+        <GenBtn text={"Add Goals"} bg={"#D9D9D9"} pressed={addItem} ></GenBtn>
       </ScrollView>
       
-      <GenBtn text={"Generate"} bg={"green"}></GenBtn>
+      <GenBtn text={"Generate Vision"} bg={"#65D977"}></GenBtn>
     </SafeAreaView>
   );
 };
@@ -91,7 +99,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20, // Adjust padding to include the button
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#86A7FC',
     padding: 15,
     width: '100%',
     marginVertical: 8,
@@ -107,7 +115,34 @@ const styles = StyleSheet.create({
   btn:{
     borderRadius:434,
     marginBottom:30,
-  }
+  },
+  h1: {
+    fontFamily: "Dolpino",
+    fontSize: 50,
+    padding:"2%",
+    color:"#000",
+  },
+
+  h2: {
+    fontFamily: "Dolpino",
+    fontSize: 34,
+    padding:"2%",
+    color:"#FFF",
+  },
+
+  h2a: {
+    fontFamily: "Dolpino",
+    fontSize: 34,
+    // padding:"2%",
+    color:"#FFF",
+  },
+
+  h3: {
+    fontFamily: "Dolpino",
+    fontSize: 18,
+    padding:"2%",
+    color:"#7097FA",
+  },
 });
 
 export default GoalList;
