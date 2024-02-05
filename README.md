@@ -2,6 +2,8 @@
 
 # Qhacks-2024: Deer, Journal
 
+Devpost: [Our Full Project here](https://devpost.com/software/deer-journal?ref_content=user-portfolio&ref_feature=in_progress)
+
 
 ## Results: Top 5 Project Overall
 
