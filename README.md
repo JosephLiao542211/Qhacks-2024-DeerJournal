@@ -1,6 +1,6 @@
 
 
-# Qhacks-2024
+# Qhacks-2024: Deer, Journal
 
 
 ## Results: Top 5 Project Overall
