@@ -7,6 +7,10 @@ Devpost: [Our Full Project here](https://devpost.com/software/deer-journal?ref_c
 
 ![Alt text](https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/752/272/datas/gallery.jpg)
 
+![Alt text](https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/752/268/datas/gallery.jpg)
+
+![Alt text](https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/752/267/datas/gallery.jpg)
+
 ## Results: Top 5 Project Overall
 
 
