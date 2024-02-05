@@ -1,7 +1,11 @@
 
 
 # Qhacks-2024
-#Results: Top 5
+
+
+# Results: Top 5
+
+
 Inspiration 
 With an increasing demand for therapists and mental health services and a limited supply of these resources, mental health has become a growing issue plaguing Canada, especially our youth. An estimated 1.6 million children and teenagers suffer from mental health issues, yet only 20% will receive adequate care to address this. The goal of “Deer, Journal” is to create an approachable, child-friendly resource for children to develop their self-reflective ability, their goal setting habits, and mental-health coping strategies so they are comfortable with vulnerability and becoming the best version of themselves.
 
